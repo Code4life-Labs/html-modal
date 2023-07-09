@@ -1,0 +1,24 @@
+{
+  "name": "tunangn-html-modal",
+  "version": "1.0.0",
+  "description": "Use to show dialog, message for HTML",
+  "main": "./build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "keywords": [
+    "html-modal",
+    "html-dialog",
+    "html-dialog-modal",
+    "modal"
+  ],
+  "author": "Nguyen Anh Tuan",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.22.6",
+    "@babel/core": "^7.22.8",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "typescript": "^5.1.6"
+  }
+}
