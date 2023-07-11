@@ -1,5 +1,11 @@
-import { createModal } from "creator/createModal";
+import {
+  HTMLModal,
+  DialogDefaultDataProps
+} from "./class/HTMLModal";
+import { createModal } from "./creator/createModal";
 
 export {
-  createModal
+  createModal,
+  HTMLModal,
+  DialogDefaultDataProps
 }

@@ -1,17 +1,29 @@
-const style: {[key: string]: Partial<CSSStyleDeclaration>} = {
-  container: {
+import { BoxShadowStyles } from "./shadow";
+import { SpacingStyles } from "./spacing";
+import { ShapeStyles } from "./shape";
+
+import { MIUIStyleNameEnum } from "../types/miui";
+
+export const DialogStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyleDeclaration>} = {
+  [MIUIStyleNameEnum.Container]: {
     maxWidth: "100%",
-    height: "25vh"
+    height: "25vh",
+    ...BoxShadowStyles.BShadow1,
+    ...ShapeStyles.Rounded8
   },
-  header: {
 
+  [MIUIStyleNameEnum.Header]: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    ...SpacingStyles.P1
   },
-  body: {
 
+  [MIUIStyleNameEnum.Body]: {
+    ...SpacingStyles.P1
   },
-  footer: {
-
+  
+  [MIUIStyleNameEnum.Footer]: {
+    ...SpacingStyles.P1
   }
 };
-
-export default style;

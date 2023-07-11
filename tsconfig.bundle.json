@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "Node",
+    "module": "ES6",
+    "allowJs": true,
+    "outDir": "./bundle",
+    "rootDir": "./src",
+    "baseUrl": "./src"
+  }
+}
