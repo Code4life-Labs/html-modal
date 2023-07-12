@@ -1,8 +1,13 @@
+// Import Classes
 import {
-  HTMLModal,
-  DialogDefaultDataProps
-} from "./class/HTMLModal";
-import { createModal } from "./creator/createModal";
+  HTMLModal
+} from "./classes/HTMLModal";
+
+// Import Creators
+import { createModal } from "./creators/createModal";
+
+// Import Types
+import { DialogDefaultDataProps } from "./types/miui";
 
 export {
   createModal,

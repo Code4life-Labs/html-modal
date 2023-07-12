@@ -1,14 +1,27 @@
-import { BoxShadowStyles } from "./shadow";
-import { SpacingStyles } from "./spacing";
-import { ShapeStyles } from "./shape";
+import { ColorValues } from "./bases/variables";
+import { BoxShadowStyles } from "./bases/shadow";
+import { SpacingStyles } from "./bases/spacing";
+import { ShapeStyles } from "./bases/shape";
 
 import { MIUIStyleNameEnum } from "../types/miui";
 
-export const DialogStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyleDeclaration>} = {
+export const DialogComponentsStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyleDeclaration>} = {
   [MIUIStyleNameEnum.Container]: {
-    maxWidth: "100%",
-    height: "25vh",
-    ...BoxShadowStyles.BShadow1,
+    position: "absolute",
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    maxWidth: "560px",
+    minWidth: "300px",
+    height: "fit-content",
+    maxHeight: "480px",
+    minHeight: "300px",
+    margin: "0 auto",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: `${ColorValues.background}`,
+    ...BoxShadowStyles.BShadow2,
     ...ShapeStyles.Rounded8
   },
 
@@ -20,10 +33,15 @@ export const DialogStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyleDeclarati
   },
 
   [MIUIStyleNameEnum.Body]: {
+    height: "fit-content",
+    flexGrow: "1",
     ...SpacingStyles.P1
   },
   
   [MIUIStyleNameEnum.Footer]: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
     ...SpacingStyles.P1
   }
 };

@@ -20,9 +20,9 @@ function addStyle(element: HTMLElement, style: {[styleName in keyof Partial<CSSS
  * @param styles Inline style object of MI.
  * @returns 
  */
-function mergeStyles(...styles: Array<Partial<{[key: string]: CSSStyleDeclaration}>>) {
+function mergeStyles(...styles: Array<Partial<CSSStyleDeclaration>>) {
   let merged = {};
-  
+
   for(let style of styles) {
     if(typeof style === "object" && Array.isArray(style)) {
       merged = {...merged, ...mergeStyles(...style)};

@@ -1,3 +1,5 @@
+import { MITypes } from "tunangn-modal";
+
 export enum MIUIStyleNameEnum {
   Container = "Container",
   Header = "Header",
@@ -17,7 +19,11 @@ export interface MIUIComponent<UIElementType> {
   /**
    * You don't need to use other properties if you set `element`.
    */
-  element?: UIElementType
+  element?: UIElementType,
+  /**
+   * Clear default inline stlye.
+   */
+  clearDefaultInlineStyle: boolean
 };
 
 export interface MIContainer<UIElementType> extends MIUIComponent<UIElementType> {
@@ -82,4 +88,57 @@ export interface MIFooter<UIElementType> extends MIUIComponent<UIElementType> {
    * @returns 
    */
   agreeEnableWhen?: () => Promise<boolean>
+}
+
+export interface DialogDefaultDataProps {
+  title: string,
+  content: string,
+  closeLabel: string,
+  agreeLabel: string
+}
+
+export interface HTMLModalAddItemOptions<UIElementType> {
+  /**
+   * Name of Modal Item.
+   */
+  name: string,
+  /**
+   * Type of Modal Item. Default is "dialog"
+   */
+  type: MITypes,
+  /**
+   * UI Element of Modal Item Container.
+   */
+  container?: MIContainer<UIElementType>,
+  /**
+   * UI Element of Modal Item Header.
+   */
+  header?: MIHeader<UIElementType>,
+  /**
+   * UI Element of Modal Item Body.
+   */
+  body?: MIBody<UIElementType>,
+  /**
+   * UI Element of Modal Item Footer.
+   */
+  footer?: MIFooter<UIElementType>,
+  /**
+   * Clear all default inline style.
+   */
+  clearAllDefaultInlineStyle: boolean,
+  /**
+   * Only for Side.
+   * Where does side place?
+   */
+  placeOn?: "left" | "right",
+  /**
+   * Only for Snackbar.
+   * Position of snackbar
+   */
+  position?: "top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right"
+}
+
+export interface OpenOptions {
+  hasTWhiteBG?: boolean,
+  hasTBlackBG?: boolean
 }
