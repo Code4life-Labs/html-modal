@@ -12,6 +12,7 @@ import {
 } from "tunangn-modal";
 
 import { DialogTemplate } from "../templates/dialog";
+import { SideTemplate } from "../templates/side";
 
 import { ElementUtils } from "../utils/element";
 
@@ -189,6 +190,18 @@ export class HTMLModal {
             name: options.name,
             placeOn: options.placeOn,
             build: function(builder) {
+              // Build Container for Side
+              builder.buildCompoment("container", SideTemplate.buildContainer(options));
+
+              // Build Header for Side
+              builder.buildCompoment("header", SideTemplate.buildHeader(options));
+
+              // Build Body for Side
+              builder.buildCompoment("body", SideTemplate.buildBody(options));
+
+              // Build Footer for Side
+              builder.buildCompoment("footer", SideTemplate.buildFooter(options));
+
               return true;
             }
           })
@@ -231,6 +244,7 @@ export class HTMLModal {
     this._modal.container?.removeChild(MIUIComponent);
 
     // Hide modal container first
-    this._modal.container!.style.display = "none";
+    if(this._modal.container!.children.length === 0)
+      this._modal.container!.style.display = "none";
   }
 }

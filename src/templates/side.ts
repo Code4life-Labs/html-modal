@@ -1,8 +1,10 @@
 import { MIResult } from "tunangn-modal"
 
+import { MoveAnim } from "../animations/move";
+
 import { ElementUtils } from "../utils/element";
 
-import { DialogComponentsStyle } from "../styles/dialog";
+import { SideComponentsStyle, SidePositions } from "../styles/side";
 import { ButtonStyles } from "../styles/bases/button";
 import { SpacingStyles } from "../styles/bases/spacing";
 
@@ -18,11 +20,18 @@ function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 
     let clearInlineStyle = options.clearAllDefaultInlineStyle || options.container?.clearDefaultInlineStyle;
 
+    // Add class to side container
     divEle.classList.add(options?.container?.className ? options?.container.className : "tunangn-side");
 
     if(options?.container?.id) divEle.id = options?.container?.id;
     if(options?.container?.style) ElementUtils.addStyle(divEle, options?.container?.style);
-    else if(!clearInlineStyle) ElementUtils.addStyle(divEle, DialogComponentsStyle.Container);
+    else if(!clearInlineStyle) {
+      let placeOneStyle = ElementUtils.mergeStyles(SideComponentsStyle.Container, options.placeOn === "right" ? SidePositions.Right : SidePositions.Left);
+      ElementUtils.addStyle(divEle, placeOneStyle);
+    }
+
+    // Set up transform animation after Div element is set done.
+    options.placeOn === "right" ? MoveAnim.FromRight(divEle) : MoveAnim.FromLeft(divEle);
 
     return divEle;
   }
@@ -47,7 +56,7 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 
     if(options?.header?.style) ElementUtils.addStyle(divEle, options?.header?.style);
     else if(!clearInlineStyle) {
-      ElementUtils.addStyle(divEle, DialogComponentsStyle.Header);
+      ElementUtils.addStyle(divEle, SideComponentsStyle.Header);
       ElementUtils.addStyle(closeBtn, ButtonStyles.BtnClose);
     }
 
@@ -83,7 +92,7 @@ function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 
     // Set style for Modal Item Body
     if(options?.body?.style) ElementUtils.addStyle(divEle, options?.body?.style);
-    else if(!clearInlineStyle) ElementUtils.addStyle(divEle, DialogComponentsStyle.Body);
+    else if(!clearInlineStyle) ElementUtils.addStyle(divEle, SideComponentsStyle.Body);
     
     // Add content.
     contentEle.append(content);
@@ -108,13 +117,14 @@ function buildFooter(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     // Set custom style for Modal Item Footer
     if(options?.footer?.style) ElementUtils.addStyle(divEle, options?.footer?.style);
     else if(!clearInlineStyle) {
-      ElementUtils.addStyle(divEle, DialogComponentsStyle.Footer);
+      ElementUtils.addStyle(divEle, SideComponentsStyle.Footer);
     };
+
     return divEle;
   }
 }
 
-export const DialogTemplate = {
+export const SideTemplate = {
   buildContainer,
   buildHeader,
   buildBody,
