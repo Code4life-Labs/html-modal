@@ -1,3 +1,5 @@
+import { MITypes, MIResult, ModalItem } from "tunangn-modal";
+
 /**
  * **ElementUtils**
  * 
@@ -34,7 +36,37 @@ function mergeStyles(...styles: Array<Partial<CSSStyleDeclaration>>) {
   return merged;
 }
 
+/**
+ * **ElementUtils**
+ * 
+ * Use to get HTMLElement from `string` or `function`.
+ * @param element
+ * @param args Arguments for element if it is a `function`.
+ * @returns 
+ */
+function getHTMLElementFromOptions<UIElementType, Data>(
+  element: string | ((data: Data, close: (result: MIResult) => void, item: ModalItem<UIElementType>) => UIElementType),
+  args?: {
+    close: (result: MIResult) => void,
+    item: ModalItem<UIElementType>,
+    data?: Data,
+  }
+) {
+  switch(typeof element) {
+    case "function": {
+      return element(args?.data!, args?.close!, args?.item!);
+    };
+
+    case "string": {
+      let div = document.createElement("div");
+      div.innerHTML = element;
+      return div.children[0] as UIElementType;
+    }
+  }
+}
+
 export const ElementUtils = {
   addStyle,
-  mergeStyles
+  mergeStyles,
+  getHTMLElementFromOptions
 };

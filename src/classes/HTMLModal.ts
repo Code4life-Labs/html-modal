@@ -4,6 +4,7 @@ import {
   ModalItem,
   Dialog,
   Side,
+  Snackbar,
   MIResult,
   MIUIEBuilder,
   MIMOpenCallBackOptions,
@@ -13,15 +14,15 @@ import {
 
 import { DialogTemplate } from "../templates/dialog";
 import { SideTemplate } from "../templates/side";
+import { SnackbarTemplate } from "../templates/snackbar";
 
 import { ElementUtils } from "../utils/element";
 
 import { ModalStyles } from "../styles/modal";
 
 import {
-  OpenOptions,
   HTMLModalAddItemOptions
-} from "../types/miui";
+} from "../types";
 
 export interface HTMLModalOptions {
   /**
@@ -108,25 +109,20 @@ export class HTMLModal {
    * @method
    * @param name Name of Modal Item that registered before.
    * @param data Data is transfered to Modal Item.
-   * @param options Options for showing Modal Item.
    * @returns {Promise<MIResult>}
    */
-  open<DTType>(name: string, data?: DTType, options?: OpenOptions) {
+  open<DTType>(name: string, data?: DTType) {
     try {
       let item = this._modal.getItem(name)!;
       // Set data for item.
       item.setData(data);
 
       // Show modal container first
-    this._modal.container!.style.display = "flex";
-
-    console.log("Item type: ", item.type);
+    this._modal.container!.style.display = "block";
 
     switch(item.type) {
       case "dialog": {
         ElementUtils.addStyle(this._modal.container!, ModalStyles.TranparentBlackBG);
-        console.log("Background color: ", ModalStyles.TranparentBlackBG);
-        console.log("Modal's background when dialog is showed: ", this._modal.container!.style.backgroundColor);
         break;
       };
 
@@ -136,6 +132,7 @@ export class HTMLModal {
       };
 
       case "snack-bar": {
+        this._modal.container!.style.pointerEvents = "none";
         break;
       }
     }
@@ -149,7 +146,6 @@ export class HTMLModal {
 
   /**
    * Use to add new Modal Item, this can be Dialog, Snack bar or Side.
-   * 
    * @method
    * @param options Components of Modal Item, contains Header, Body and Footer.
    * @returns 
@@ -160,6 +156,8 @@ export class HTMLModal {
       options = Object.assign({
         type: "dialog"
       }, options);
+
+      let that = this;
 
       let item;
       switch(options.type) {
@@ -204,11 +202,30 @@ export class HTMLModal {
 
               return true;
             }
-          })
+          });
           break;
         };
 
         case "snack-bar": {
+          item = new Snackbar<HTMLDivElement>({
+            name: options.name,
+            position: options.position,
+            build: function(builder) {
+              // Build Container for Snackbar
+              builder.buildCompoment("container", SnackbarTemplate.buildContainer(options));
+
+              // Build Header for Snackbar
+              builder.buildCompoment("header", SnackbarTemplate.buildHeader(options));
+
+              // Build Body for Snackbar
+              builder.buildCompoment("body", SnackbarTemplate.buildBody(options));
+
+              // Build Footer for Snackbar
+              builder.buildCompoment("footer", SnackbarTemplate.buildFooter(options));
+
+              return true;
+            }
+          });
           break;
         }
       };
@@ -244,7 +261,11 @@ export class HTMLModal {
     this._modal.container?.removeChild(MIUIComponent);
 
     // Hide modal container first
-    if(this._modal.container!.children.length === 0)
+    // Reset all modal styles.
+    if(this._modal.container!.children.length === 0) {
+      this._modal.container!.style.backgroundColor = "";
+      this._modal.container!.style.pointerEvents = "";
       this._modal.container!.style.display = "none";
+    }
   }
 }

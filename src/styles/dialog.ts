@@ -3,10 +3,11 @@ import { BoxShadowStyles } from "./bases/shadow";
 import { SpacingStyles } from "./bases/spacing";
 import { ShapeStyles } from "./bases/shape";
 
-import { MIUIStyleNameEnum } from "../types/miui";
+import { MIUIStyleNameEnum } from "../types";
 
 export const DialogComponentsStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyleDeclaration>} = {
   [MIUIStyleNameEnum.Container]: {
+    pointerEvents: "auto",
     position: "absolute",
     display: "flex",
     flexDirection: "column",
@@ -29,6 +30,7 @@ export const DialogComponentsStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyl
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    fontWeight: "700",
     ...SpacingStyles.P1
   },
 

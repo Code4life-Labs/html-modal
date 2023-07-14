@@ -3,10 +3,11 @@ import { BoxShadowStyles } from "./bases/shadow";
 import { SpacingStyles } from "./bases/spacing";
 import { ShapeStyles } from "./bases/shape";
 
-import { MIUIStyleNameEnum } from "../types/miui";
+import { MIUIStyleNameEnum } from "../types";
 
 export const SideComponentsStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyleDeclaration>} = {
   [MIUIStyleNameEnum.Container]: {
+    pointerEvents: "auto",
     position: "absolute",
     display: "flex",
     flexDirection: "column",
@@ -16,13 +17,14 @@ export const SideComponentsStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyleD
     height: "100vh",
     margin: "0 auto",
     backgroundColor: `${ColorValues.background}`,
-    ...BoxShadowStyles.BShadow2
+    ...BoxShadowStyles.BShadow1
   },
 
   [MIUIStyleNameEnum.Header]: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    fontWeight: "700",
     ...SpacingStyles.P1
   },
 
@@ -40,7 +42,7 @@ export const SideComponentsStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyleD
   }
 };
 
-export const SidePositions: {[key in "Left" | "Right"]: Partial<CSSStyleDeclaration>} = {
+export const SidePlaceOnStyles: {[key in "Left" | "Right"]: Partial<CSSStyleDeclaration>} = {
   Left: {
     top: "0",
     left: "0"

@@ -15,7 +15,13 @@ enum ShapeStyleNameEnum {
   RoundedBottomRight12 = "RoundedBottomRight12",
   RoundedBottomLeft4 = "RoundedBottomLeft4",
   RoundedBottomLeft8 = "RoundedBottomLeft8",
-  RoundedBottomLeft12 = "RoundedBottomLeft12"
+  RoundedBottomLeft12 = "RoundedBottomLeft12",
+  RoundedTopBottomLeft4 = "RoundedTopBottomLeft4",
+  RoundedTopBottomLeft8 = "RoundedTopBottomLeft8",
+  RoundedTopBottomLeft12 = "RoundedTopBottomLeft12",
+  RoundedTopBottomRight4 = "RoundedTopBottomRight4",
+  RoundedTopBottomRight8 = "RoundedTopBottomRight8",
+  RoundedTopBottomRight12 = "RoundedTopBottomRight12"
 }
 
 export const ShapeStyles: {[key in ShapeStyleNameEnum]: Partial<CSSStyleDeclaration>} = {
@@ -86,5 +92,35 @@ export const ShapeStyles: {[key in ShapeStyleNameEnum]: Partial<CSSStyleDeclarat
   
   [ShapeStyleNameEnum.RoundedBottomLeft12]: {
     borderBottomLeftRadius: "12px"
+  },
+
+  [ShapeStyleNameEnum.RoundedTopBottomLeft4]: {
+    borderTopLeftRadius: "4px",
+    borderBottomLeftRadius: "4px"
+  },
+
+  [ShapeStyleNameEnum.RoundedTopBottomLeft8]: {
+    borderTopLeftRadius: "8px",
+    borderBottomLeftRadius: "8px"
+  },
+
+  [ShapeStyleNameEnum.RoundedTopBottomLeft12]: {
+    borderTopLeftRadius: "12px",
+    borderBottomLeftRadius: "12px"
+  },
+
+  [ShapeStyleNameEnum.RoundedTopBottomRight4]: {
+    borderTopRightRadius: "4px",
+    borderBottomRightRadius: "4px"
+  },
+
+  [ShapeStyleNameEnum.RoundedTopBottomRight8]: {
+    borderTopRightRadius: "8px",
+    borderBottomRightRadius: "8px"
+  },
+
+  [ShapeStyleNameEnum.RoundedTopBottomRight12]: {
+    borderTopRightRadius: "12px",
+    borderBottomRightRadius: "12px"
   }
 };

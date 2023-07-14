@@ -1,4 +1,4 @@
-import { BorderValue } from "./variables"
+import { BorderValues } from "./variables"
 
 import { ShapeStyles } from "./shape"
 import { SpacingStyles } from "./spacing"
@@ -49,7 +49,7 @@ export const ButtonStyles: {[key in ButtonStyleNameEnum]: Partial<CSSStyleDeclar
   },
 
   [ButtonStyleNameEnum.BtnBorder]: {
-    border: `${BorderValue.border2} ${ColorValues.outline}`
+    border: `${BorderValues.border2} ${ColorValues.outline}`
   },
 
   [ButtonStyleNameEnum.BtnClose]: {

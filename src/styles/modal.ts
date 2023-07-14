@@ -13,7 +13,8 @@ export const ModalStyles: {[key in ModalStyleNameEnum]: Partial<CSSStyleDeclarat
     width: "100%",
     height: "100vh",
     top: "0",
-    left: "0"
+    left: "0",
+    fontFamily: "sans-serif"
   },
 
   [ModalStyleNameEnum.TranparentBlackBG]: {

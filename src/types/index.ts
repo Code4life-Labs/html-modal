@@ -1,4 +1,4 @@
-import { MITypes } from "tunangn-modal";
+import { MITypes, MIResult, ModalItem } from "tunangn-modal";
 
 export enum MIUIStyleNameEnum {
   Container = "Container",
@@ -7,6 +7,50 @@ export enum MIUIStyleNameEnum {
   Footer = "Footer"
 }
 
+export interface MIUIDefaultData {
+  /**
+   * Title (as text).
+   */
+  title?: string,
+  /**
+   * Content (as text).
+   */
+  content?: string,
+}
+
+export interface DialogDefaultData extends MIUIDefaultData {
+  /**
+   * Label of Close button.
+   */
+  closeBtnLabel?: string,
+  /**
+   * Label of Agree button.
+   */
+  agreeBtnLabel?: string
+}
+
+export interface SnackbarDefaultData extends MIUIDefaultData {
+  /**
+   * Snackbar can auto close like default?
+   */
+  canAutoClose?: boolean,
+  /**
+   * Color for Snackbar
+   */
+  color?: string,
+  /**
+   * How long does Snackbar last? Default is 7s.
+   */
+  duration?: number
+}
+
+export interface SideDefaultData extends MIUIDefaultData {
+
+}
+
+/**
+ * Configurations for UI Element of MI to build.
+ */
 export interface MIUIComponent<UIElementType> {
   /**
    * ClassName for HTML Element.
@@ -19,11 +63,11 @@ export interface MIUIComponent<UIElementType> {
   /**
    * You don't need to use other properties if you set `element`.
    */
-  element?: UIElementType,
+  element?: string | (<Data>(data: Data, close: (result: MIResult) => void, item: ModalItem<UIElementType>) => UIElementType),
   /**
    * Clear default inline stlye.
    */
-  clearDefaultInlineStyle: boolean
+  clearDefaultInlineStyle?: boolean
 };
 
 export interface MIContainer<UIElementType> extends MIUIComponent<UIElementType> {
@@ -35,10 +79,6 @@ export interface MIContainer<UIElementType> extends MIUIComponent<UIElementType>
 
 export interface MIHeader<UIElementType> extends MIUIComponent<UIElementType> {
   /**
-   * Title of header.
-   */
-  title?: string,
-  /**
    * Let you know when the close button is enable
    * @returns 
    */
@@ -46,55 +86,15 @@ export interface MIHeader<UIElementType> extends MIUIComponent<UIElementType> {
 }
 
 export interface MIBody<UIElementType> extends MIUIComponent<UIElementType> {
-  content?: string | HTMLElement
+  content?: string | (() => UIElementType)
 }
 
 export interface MIFooter<UIElementType> extends MIUIComponent<UIElementType> {
-  /**
-   * Label for close button.
-   */
-  closeBtnLbl?: string,
-  /**
-   * Label for agree button.
-   */
-  agreeBtnLbl?: string,
-
-  /**
-   * If `closeBtn` is set, you don't need other properties except `agreeEnableWhen`.
-   */
-  closeBtn?: HTMLButtonElement,
-  /**
-   * If `agreeBtn` is set, you don't need other properties except `agreeEnableWhen`.
-   */
-  agreeBtn?: HTMLButtonElement,
-
-  /**
-   * Color for close button's label and container.
-   */
-  closeBtnClr?: {
-    lbl?: string,
-    container?: string
-  },
-  /**
-   * Color for agree button's label and container.
-   */
-  agreeBtnClr?: {
-    lbl?: string,
-    container?: string
-  },
-
   /**
    * Let you know when the close button is enable
    * @returns 
    */
   agreeEnableWhen?: () => Promise<boolean>
-}
-
-export interface DialogDefaultDataProps {
-  title: string,
-  content: string,
-  closeLabel: string,
-  agreeLabel: string
 }
 
 export interface HTMLModalAddItemOptions<UIElementType> {
@@ -107,25 +107,30 @@ export interface HTMLModalAddItemOptions<UIElementType> {
    */
   type: MITypes,
   /**
-   * UI Element of Modal Item Container.
+   * Component of UI Element.
    */
-  container?: MIContainer<UIElementType>,
-  /**
-   * UI Element of Modal Item Header.
-   */
-  header?: MIHeader<UIElementType>,
-  /**
-   * UI Element of Modal Item Body.
-   */
-  body?: MIBody<UIElementType>,
-  /**
-   * UI Element of Modal Item Footer.
-   */
-  footer?: MIFooter<UIElementType>,
+  components?: {
+    /**
+     * UI Element of Modal Item Container.
+     */
+    container?: MIContainer<UIElementType>,
+    /**
+     * UI Element of Modal Item Header.
+     */
+    header?: MIHeader<UIElementType>,
+    /**
+     * UI Element of Modal Item Body.
+     */
+    body?: MIBody<UIElementType>,
+    /**
+     * UI Element of Modal Item Footer.
+     */
+    footer?: MIFooter<UIElementType>,
+  }
   /**
    * Clear all default inline style.
    */
-  clearAllDefaultInlineStyle: boolean,
+  clearAllDefaultInlineStyle?: boolean,
   /**
    * Only for Side.
    * Where does side place?
@@ -136,9 +141,4 @@ export interface HTMLModalAddItemOptions<UIElementType> {
    * Position of snackbar
    */
   position?: "top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right"
-}
-
-export interface OpenOptions {
-  hasTWhiteBG?: boolean,
-  hasTBlackBG?: boolean
 }

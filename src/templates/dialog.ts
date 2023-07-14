@@ -1,4 +1,4 @@
-import { MIResult } from "tunangn-modal"
+import { MIResult, Dialog } from "tunangn-modal";
 
 import { ElementUtils } from "../utils/element";
 
@@ -7,21 +7,26 @@ import { ButtonStyles } from "../styles/bases/button";
 import { SpacingStyles } from "../styles/bases/spacing";
 
 import {
-  DialogDefaultDataProps,
+  DialogDefaultData,
   HTMLModalAddItemOptions
-} from "../types/miui"
+} from "../types"
 
 function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
-  return function(data: DialogDefaultDataProps, close: (result: MIResult) => void) {
-    if(options?.container?.element) return options?.container.element;
+  return function(
+    close: (result: MIResult) => void,
+    item: Dialog<HTMLDivElement>,
+    data?: DialogDefaultData
+  ) {
+    let container = options?.components?.container;
+    if(container?.element) return ElementUtils.getHTMLElementFromOptions(container.element, { close, item, data });
     let divEle = document.createElement("div");
 
-    let clearInlineStyle = options.clearAllDefaultInlineStyle || options.container?.clearDefaultInlineStyle;
+    let clearInlineStyle = options.clearAllDefaultInlineStyle || container?.clearDefaultInlineStyle;
 
-    divEle.classList.add(options?.container?.className ? options?.container.className : "tunangn-dialog");
+    divEle.classList.add(container?.className ? container.className : "tunangn-dialog");
 
-    if(options?.container?.id) divEle.id = options?.container?.id;
-    if(options?.container?.style) ElementUtils.addStyle(divEle, options?.container?.style);
+    if(container?.id) divEle.id = container?.id;
+    if(container?.style) ElementUtils.addStyle(divEle, container?.style);
     else if(!clearInlineStyle) ElementUtils.addStyle(divEle, DialogComponentsStyle.Container);
 
     return divEle;
@@ -29,23 +34,25 @@ function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 }
 
 function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
-  return function(data: DialogDefaultDataProps, close: (result: MIResult) => void) {
-    if(options?.header?.element) return options?.header?.element;
+  return function(
+    close: (result: MIResult) => void,
+    item: Dialog<HTMLDivElement>,
+    data?: DialogDefaultData
+  ) {
+    let header = options?.components?.header;
+    if(header?.element) return ElementUtils.getHTMLElementFromOptions(header.element, { close, item, data });
     let divEle = document.createElement("div");
     let titlePEle = document.createElement("div");
     let closeBtn = document.createElement("button");
 
-    let clearInlineStyle = options.clearAllDefaultInlineStyle || options.header?.clearDefaultInlineStyle;
+    let clearInlineStyle = options.clearAllDefaultInlineStyle || header?.clearDefaultInlineStyle;
     // let closeBtnStyle = ElementUtils.mergeStyles(ButtonStyles.Btn, ButtonStyles.BtnClose);
 
-    let headerTitle =
-    data?.title ? data?.title
-    : options?.header?.title ? options?.header?.title
-    : options.name;
+    let headerTitle = data?.title || options.name;
 
-    divEle.classList.add(options?.header?.className ? options?.header.className : "tunangn-dialog-header");
+    divEle.classList.add(header?.className ? header.className : "tunangn-dialog-header");
 
-    if(options?.header?.style) ElementUtils.addStyle(divEle, options?.header?.style);
+    if(header?.style) ElementUtils.addStyle(divEle, header?.style);
     else if(!clearInlineStyle) {
       ElementUtils.addStyle(divEle, DialogComponentsStyle.Header);
       ElementUtils.addStyle(closeBtn, ButtonStyles.BtnClose);
@@ -66,23 +73,28 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 }
 
 function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
-  return function( data: DialogDefaultDataProps, close: (result: MIResult) => void) {
-    if(options.body?.element) return options.body?.element;
+  return function(
+    close: (result: MIResult) => void,
+    item: Dialog<HTMLDivElement>,
+    data?: DialogDefaultData
+  ) {
+    let body = options?.components?.body;
+    if(body?.element) return ElementUtils.getHTMLElementFromOptions(body.element, { close, item, data });
     let divEle = document.createElement("div");
     let contentEle = document.createElement("div");
     
-    let clearInlineStyle = options.clearAllDefaultInlineStyle || options.body?.clearDefaultInlineStyle;
+    let clearInlineStyle = options?.clearAllDefaultInlineStyle || body?.clearDefaultInlineStyle;
 
     let content =
-    data.content ? data.content
-    : options.body?.content ? options.body?.content
-    : "This is a default content of body."
+      data?.content
+      || (body?.content && ElementUtils.getHTMLElementFromOptions(body?.content))
+      || "This is a default content of body.";
 
     // Set class for Modal Item Body
-    divEle.classList.add(options?.body?.className ? options?.body.className : "tunangn-dialog-body");
+    divEle.classList.add(body?.className ? body.className : "tunangn-dialog-body");
 
     // Set style for Modal Item Body
-    if(options?.body?.style) ElementUtils.addStyle(divEle, options?.body?.style);
+    if(body?.style) ElementUtils.addStyle(divEle, body?.style);
     else if(!clearInlineStyle) ElementUtils.addStyle(divEle, DialogComponentsStyle.Body);
     
     // Add content.
@@ -96,28 +108,27 @@ function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 }
 
 function buildFooter(options: HTMLModalAddItemOptions<HTMLDivElement>) {
-  return function(data: DialogDefaultDataProps, close: (result: MIResult) => void) {
-    if(options.footer?.element) return options.footer?.element;
+  return function(
+    close: (result: MIResult) => void,
+    item: Dialog<HTMLDivElement>,
+    data?: DialogDefaultData
+  ) {
+    let footer = options?.components?.footer;
+    if(footer?.element) return ElementUtils.getHTMLElementFromOptions(footer.element, { close, item, data });
     let divEle = document.createElement("div");
-    let closeBtn = options.footer?.closeBtn ? options.footer?.closeBtn : document.createElement("button");
-    let agreeBtn = options.footer?.agreeBtn ? options.footer?.agreeBtn : document.createElement("button");
+    let closeBtn = document.createElement("button");
+    let agreeBtn = document.createElement("button");
 
-    let clearInlineStyle = options.clearAllDefaultInlineStyle || options.body?.clearDefaultInlineStyle;
+    let clearInlineStyle = options.clearAllDefaultInlineStyle || footer?.clearDefaultInlineStyle;
 
-    let closeBtnLbl =
-    data.closeLabel ? data.closeLabel
-    : options.footer?.closeBtnLbl ? options.footer?.closeBtnLbl
-    : "Cancel";
-    let agreeBtnLbl =
-    data.agreeLabel ? data.agreeLabel
-    : options.footer?.agreeBtnLbl ? options.footer?.agreeBtnLbl
-    : "Ok";
+    let closeBtnLbl = data?.closeBtnLabel || "Cancel";
+    let agreeBtnLbl = data?.agreeBtnLabel || "Ok";
 
     // Set class for Modal Item Footer
-    divEle.classList.add(options?.footer?.className ? options?.footer.className : "tunangn-dialog-footer");
+    divEle.classList.add(footer?.className ? footer.className : "tunangn-dialog-footer");
 
     // Set custom style for Modal Item Footer
-    if(options?.footer?.style) ElementUtils.addStyle(divEle, options?.footer?.style);
+    if(footer?.style) ElementUtils.addStyle(divEle, footer?.style);
     else if(!clearInlineStyle) {
       let closeBtnStyle = ElementUtils.mergeStyles(ButtonStyles.Btn, ButtonStyles.BtnWhite, ButtonStyles.BtnBorder, SpacingStyles.Me1);
       let agreeBtnStyle = ElementUtils.mergeStyles(ButtonStyles.Btn, ButtonStyles.BtnBlue, ButtonStyles.BtnBorder);

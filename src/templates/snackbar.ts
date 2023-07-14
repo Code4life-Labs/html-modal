@@ -1,44 +1,96 @@
-import { MIResult, Side } from "tunangn-modal";
+import { MIResult, Snackbar } from "tunangn-modal"
 
 import { MoveAnim } from "../animations/move";
 
 import { ElementUtils } from "../utils/element";
 
-import { SideComponentsStyle, SidePlaceOnStyles } from "../styles/side";
+import { SnackbarComponentsStyle, SnackbarPositionStyles } from "../styles/snackbar";
 import { ButtonStyles } from "../styles/bases/button";
 import { SpacingStyles } from "../styles/bases/spacing";
 
 import {
-  SideDefaultData,
+  SnackbarDefaultData,
   HTMLModalAddItemOptions
 } from "../types"
 
 function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Side<HTMLDivElement>,
-    data?: SideDefaultData
+    item: Snackbar<HTMLDivElement>,
+    data?: SnackbarDefaultData,
   ) {
     let container = options.components?.container;
     if(container?.element) return ElementUtils.getHTMLElementFromOptions(container.element, { close, item, data });
     let divEle = document.createElement("div");
 
-    let placeOn = options.placeOn ? options.placeOn : item.placeOn;
-
     let clearInlineStyle = options.clearAllDefaultInlineStyle || container?.clearDefaultInlineStyle;
 
     // Add class to side container
-    divEle.classList.add(container?.className ? container.className : "tunangn-side");
+    divEle.classList.add(container?.className ? container.className : "tunangn-snackbar");
 
     if(container?.id) divEle.id = container?.id;
     if(container?.style) ElementUtils.addStyle(divEle, container?.style);
     else if(!clearInlineStyle) {
-      let placeOneStyle = ElementUtils.mergeStyles(SideComponentsStyle.Container, placeOn === "right" ? SidePlaceOnStyles.Right : SidePlaceOnStyles.Left);
-      ElementUtils.addStyle(divEle, placeOneStyle);
+      let position = options.position ? options.position : item.position;
+      let positionStyle;
+      console.log("Position: ", position);
+      // Set up transform animation and position.
+      switch(position) {
+        case "top": {
+          MoveAnim.From(divEle, [
+            { transform: "translate(-50%, -100%)" },
+            { transform: "translate(-50%, 0)" }
+          ]);
+          positionStyle = SnackbarPositionStyles.Top;
+          break;
+        };
+
+        case "top-left": {
+          MoveAnim.From(divEle);
+          positionStyle = SnackbarPositionStyles.TopLeft;
+          break;
+        };
+
+        case "bottom": {
+          MoveAnim.From(divEle, [
+            { transform: "translate(-50%, 100%)" },
+            { transform: "translate(-50%, 0)" }
+          ]);
+          positionStyle = SnackbarPositionStyles.Bottom;
+          break;
+        };
+
+        case "bottom-left": {
+          MoveAnim.From(divEle);
+          positionStyle = SnackbarPositionStyles.BottomLeft;
+          break;
+        };
+
+        case "bottom-right": {
+          MoveAnim.From(divEle, undefined, "Right");
+          positionStyle = SnackbarPositionStyles.BottomRight;
+          break;
+        };
+
+        default: {
+          MoveAnim.From(divEle, undefined, "Right");
+          positionStyle = SnackbarPositionStyles.TopRight;
+          break;
+        }
+      }
+
+      let merged =  ElementUtils.mergeStyles(
+        SnackbarComponentsStyle.Container,
+        positionStyle
+      );
+      ElementUtils.addStyle(divEle, merged);
     }
 
-    // Set up transform animation after Div element is set done.
-    placeOn === "right" ? MoveAnim.From(divEle, undefined, "Right") : MoveAnim.From(divEle);
+    // Auto remove snackbar
+    if(data?.canAutoClose === undefined || data?.canAutoClose)
+      setTimeout(() => {
+        close({ isAgree: false });
+      }, data?.duration || item.duration);
 
     return divEle;
   }
@@ -47,37 +99,31 @@ function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Side<HTMLDivElement>,
-    data?: SideDefaultData
+    item: Snackbar<HTMLDivElement>,
+    data?: SnackbarDefaultData,
   ) {
-    let header = options?.components?.header;
+    let header = options.components?.header;
     if(header?.element) return ElementUtils.getHTMLElementFromOptions(header.element, { close, item, data });
     let divEle = document.createElement("div");
     let titlePEle = document.createElement("div");
-    let closeBtn = document.createElement("button");
 
     let clearInlineStyle = options.clearAllDefaultInlineStyle || header?.clearDefaultInlineStyle;
     // let closeBtnStyle = ElementUtils.mergeStyles(ButtonStyles.Btn, ButtonStyles.BtnClose);
 
     let headerTitle = data?.title || options.name;
 
-    divEle.classList.add(header?.className ? header.className : "tunangn-side-header");
+    divEle.classList.add(header?.className ? header.className : "tunangn-snack-header");
 
     if(header?.style) ElementUtils.addStyle(divEle, header?.style);
     else if(!clearInlineStyle) {
-      ElementUtils.addStyle(divEle, SideComponentsStyle.Header);
-      ElementUtils.addStyle(closeBtn, ButtonStyles.BtnClose);
+      ElementUtils.addStyle(divEle, SnackbarComponentsStyle.Header);
     }
-
 
     // Setup header's components
     titlePEle.textContent = headerTitle;
 
-    // Add action
-    closeBtn.onclick = () => close({ isAgree: false });
-
     // Add Element
-    divEle.append(titlePEle, closeBtn);
+    divEle.append(titlePEle);
 
     return divEle;
   }
@@ -86,8 +132,8 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Side<HTMLDivElement>,
-    data?: SideDefaultData
+    item: Snackbar<HTMLDivElement>,
+    data?: SnackbarDefaultData,
   ) {
     let body = options.components?.body;
     if(body?.element) return ElementUtils.getHTMLElementFromOptions(body.element, { close, item, data });
@@ -96,17 +142,16 @@ function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     
     let clearInlineStyle = options.clearAllDefaultInlineStyle || body?.clearDefaultInlineStyle;
 
-    let content =
-    data?.content
+    let content = data?.content
     || (body?.content && ElementUtils.getHTMLElementFromOptions(body?.content))
     || "This is a default content of body.";
 
     // Set class for Modal Item Body
-    divEle.classList.add(body?.className ? body.className : "tunangn-side-body");
+    divEle.classList.add(body?.className ? body.className : "tunangn-snack-body");
 
     // Set style for Modal Item Body
     if(body?.style) ElementUtils.addStyle(divEle, body?.style);
-    else if(!clearInlineStyle) ElementUtils.addStyle(divEle, SideComponentsStyle.Body);
+    else if(!clearInlineStyle) ElementUtils.addStyle(divEle, SnackbarComponentsStyle.Body);
     
     // Add content.
     contentEle.append(content);
@@ -121,29 +166,36 @@ function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 function buildFooter(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Side<HTMLDivElement>,
-    data?: SideDefaultData
+    item: Snackbar<HTMLDivElement>,
+    data?: SnackbarDefaultData
   ) {
     let footer = options.components?.footer;
     if(footer?.element) return ElementUtils.getHTMLElementFromOptions(footer.element, { close, item, data });
     let divEle = document.createElement("div");
+    let closeBtn = document.createElement("button");
 
     let clearInlineStyle = options.clearAllDefaultInlineStyle || footer?.clearDefaultInlineStyle;
 
     // Set class for Modal Item Footer
-    divEle.classList.add(footer?.className ? footer.className : "tunangn-side-footer");
+    divEle.classList.add(footer?.className ? footer.className : "tunangn-snack-footer");
 
     // Set custom style for Modal Item Footer
     if(footer?.style) ElementUtils.addStyle(divEle, footer?.style);
     else if(!clearInlineStyle) {
-      ElementUtils.addStyle(divEle, SideComponentsStyle.Footer);
+      ElementUtils.addStyle(divEle, SnackbarComponentsStyle.Footer);
+      ElementUtils.addStyle(closeBtn, ButtonStyles.BtnClose);
     };
+
+    // Add action
+    closeBtn.onclick = () => close({ isAgree: false });
+
+    divEle.append(closeBtn);
 
     return divEle;
   }
 }
 
-export const SideTemplate = {
+export const SnackbarTemplate = {
   buildContainer,
   buildHeader,
   buildBody,

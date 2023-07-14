@@ -17,10 +17,18 @@ export const ColorValues = {
   rgbOutline: "197, 197, 197"
 }
 
-export const BorderValue = {
+export const BorderValues = {
   /* FOR BORDER */
   border1: "1px solid",
-  border2: "2px solid"
+  border2: "2px solid",
+  border3: "3px solid",
+  border4: "4px solid",
+  border5: "5px solid",
+  border6: "6px solid",
+  border7: "7px solid",
+  border8: "8px solid",
+  border9: "9px solid",
+  border10: "10px solid"
 }
 
 export const SpacingValues = {
