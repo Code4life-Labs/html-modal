@@ -24,6 +24,6 @@ import { dialog } from "";
 ## How to use?
 I split this article into 2 versions of languages:
 
-`Vietnamese`: [Đọc thêm]()
+`Vietnamese`: [Đọc thêm](README_VIE.md)
 
 `English`: [Read more]()
