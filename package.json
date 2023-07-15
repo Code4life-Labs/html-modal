@@ -18,7 +18,9 @@
     "html-modal",
     "html-dialog",
     "html-dialog-modal",
-    "modal"
+    "modal",
+    "snackbar",
+    "side"
   ],
   "author": "Nguyen Anh Tuan",
   "license": "MIT",
@@ -30,8 +32,6 @@
     "rollup-plugin-esbuild": "^5.0.0",
     "ts-loader": "^9.4.4",
     "tslib": "^2.6.0",
-    "typescript": "^5.1.6",
-    "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4"
+    "typescript": "^5.1.6"
   }
 }
