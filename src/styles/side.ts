@@ -12,7 +12,7 @@ export const SideComponentsStyle: {[key in MIUIStyleNameEnum]: Partial<CSSStyleD
     display: "flex",
     flexDirection: "column",
     width: "100%",
-    maxWidth: "480px",
+    maxWidth: "360px",
     minWidth: "300px",
     height: "100vh",
     margin: "0 auto",

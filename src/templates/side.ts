@@ -20,7 +20,10 @@ function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     data?: SideDefaultData
   ) {
     let container = options.components?.container;
-    if(container?.element) return ElementUtils.getHTMLElementFromOptions(container.element, { close, item, data });
+    if(
+      typeof container === "string"
+      || typeof container === "function"
+    ) return ElementUtils.getHTMLElementFromOptions(container, { close, item, data });
     let divEle = document.createElement("div");
 
     let placeOn = options.placeOn ? options.placeOn : item.placeOn;
@@ -51,7 +54,10 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     data?: SideDefaultData
   ) {
     let header = options?.components?.header;
-    if(header?.element) return ElementUtils.getHTMLElementFromOptions(header.element, { close, item, data });
+    if(
+      typeof header === "string"
+      || typeof header === "function"
+    ) return ElementUtils.getHTMLElementFromOptions(header, { close, item, data });
     let divEle = document.createElement("div");
     let titlePEle = document.createElement("div");
     let closeBtn = document.createElement("button");
@@ -71,7 +77,7 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 
 
     // Setup header's components
-    titlePEle.textContent = headerTitle;
+    titlePEle.innerHTML = headerTitle;
 
     // Add action
     closeBtn.onclick = () => close({ isAgree: false });
@@ -90,9 +96,11 @@ function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     data?: SideDefaultData
   ) {
     let body = options.components?.body;
-    if(body?.element) return ElementUtils.getHTMLElementFromOptions(body.element, { close, item, data });
+    if(
+      typeof body === "string"
+      || typeof body === "function"
+    ) return ElementUtils.getHTMLElementFromOptions(body, { close, item, data });
     let divEle = document.createElement("div");
-    let contentEle = document.createElement("div");
     
     let clearInlineStyle = options.clearAllDefaultInlineStyle || body?.clearDefaultInlineStyle;
 
@@ -107,12 +115,10 @@ function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     // Set style for Modal Item Body
     if(body?.style) ElementUtils.addStyle(divEle, body?.style);
     else if(!clearInlineStyle) ElementUtils.addStyle(divEle, SideComponentsStyle.Body);
-    
-    // Add content.
-    contentEle.append(content);
 
     // Append children node
-    divEle.append(contentEle);
+    if(typeof content === "string") divEle.innerHTML = content;
+    else divEle.append(content);
 
     return divEle;
   }
@@ -125,7 +131,10 @@ function buildFooter(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     data?: SideDefaultData
   ) {
     let footer = options.components?.footer;
-    if(footer?.element) return ElementUtils.getHTMLElementFromOptions(footer.element, { close, item, data });
+    if(
+      typeof footer === "string"
+      || typeof footer === "function"
+    ) return ElementUtils.getHTMLElementFromOptions(footer, { close, item, data });
     let divEle = document.createElement("div");
 
     let clearInlineStyle = options.clearAllDefaultInlineStyle || footer?.clearDefaultInlineStyle;

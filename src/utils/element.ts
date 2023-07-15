@@ -45,7 +45,7 @@ function mergeStyles(...styles: Array<Partial<CSSStyleDeclaration>>) {
  * @returns 
  */
 function getHTMLElementFromOptions<UIElementType, Data>(
-  element: string | ((data: Data, close: (result: MIResult) => void, item: ModalItem<UIElementType>) => UIElementType),
+  element: string | ((close: (result: MIResult) => void, item: ModalItem<UIElementType>, data?: Data) => UIElementType),
   args?: {
     close: (result: MIResult) => void,
     item: ModalItem<UIElementType>,
@@ -54,7 +54,7 @@ function getHTMLElementFromOptions<UIElementType, Data>(
 ) {
   switch(typeof element) {
     case "function": {
-      return element(args?.data!, args?.close!, args?.item!);
+      return element(args?.close!, args?.item!, args?.data!);
     };
 
     case "string": {

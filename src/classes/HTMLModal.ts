@@ -35,6 +35,8 @@ export class HTMLModal {
   private _modal!: Modal<HTMLDivElement>
   private _itemsInQueue?: Array<{name: string, item: Dialog<HTMLElement>}>
 
+  private static _uid: string = "__tunangn_modal__";
+
   constructor(options?: HTMLModalOptions) {
     // Bind methods
     this._append = this._append.bind(this);
@@ -74,9 +76,16 @@ export class HTMLModal {
       );
       
       document.addEventListener("DOMContentLoaded", () => {
+        let existingModalContainer = document.body.querySelector(`[data-uid='${options?.className || HTMLModal._uid}']`);
         this._modal = new Modal();
-        this._modal.container = document.createElement("div");
-        this._modal.container.classList.add(options?.className ? options.className : "tunangn-modal");
+        if(existingModalContainer) this._modal.container = existingModalContainer as HTMLDivElement;
+        else {
+          this._modal.container = document.createElement("div");
+          this._modal.container.classList.add(options?.className ? options.className : "tunangn-modal");
+        }
+
+        // this._modal.container = document.createElement("div");
+        // this._modal.container.classList.add(options?.className ? options.className : "tunangn-modal");
 
         // Add inline style
         ElementUtils.addStyle(this._modal.container, ModalStyles.Default);
@@ -88,6 +97,9 @@ export class HTMLModal {
 
         // After assigning all items, delete this property.
         delete this._itemsInQueue;
+
+        // Append _data attribute
+        this._modal.container.setAttribute("data-uid", options?.className || HTMLModal._uid);
 
         // Append modal to body element.
         document.body.append(this._modal.container);
@@ -153,18 +165,13 @@ export class HTMLModal {
   addItem(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     try {
       if(!options.name) throw new Error("Name of MI must be set.");
-      options = Object.assign({
-        type: "dialog"
-      }, options);
-
-      let that = this;
 
       let item;
       switch(options.type) {
         case "dialog": {
           item = new Dialog<HTMLDivElement>({
             name: options.name,
-            build: function (builder) {
+            build: function(builder) {
               // Build Container for Dialog
               builder.buildCompoment("container", DialogTemplate.buildContainer(options));
 

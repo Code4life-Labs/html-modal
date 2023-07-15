@@ -2,6 +2,7 @@ enum BoxShadowStyleNameEnum {
   BShadow1 = "BShadow1",
   BShadow2 = "BShadow2",
   BShadow3 = "BShadow3",
+  BShadow4 = "BShadow4"
 }
 
 export const BoxShadowStyles: {[key in BoxShadowStyleNameEnum]: Partial<CSSStyleDeclaration>} = {
@@ -15,5 +16,9 @@ export const BoxShadowStyles: {[key in BoxShadowStyleNameEnum]: Partial<CSSStyle
 
   [BoxShadowStyleNameEnum.BShadow3]: {
     boxShadow: `rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px`
+  },
+
+  [BoxShadowStyleNameEnum.BShadow4]: {
+    boxShadow: `rgba(149, 157, 165, 0.2) 0px 8px 24px`
   }
 }

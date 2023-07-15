@@ -9,13 +9,15 @@ export enum MIUIStyleNameEnum {
 
 export interface MIUIDefaultData {
   /**
-   * Title (as text).
+   * Title (as string).
+   * Or If you want to fast build header's title, you can use header's title as HTML String. 
    */
   title?: string,
   /**
-   * Content (as text).
+   * Content (as string).
+   * Or If you want to fast build body's content, you can use body's content as HTML String. 
    */
-  content?: string,
+  content?: string
 }
 
 export interface DialogDefaultData extends MIUIDefaultData {
@@ -61,10 +63,6 @@ export interface MIUIComponent<UIElementType> {
    */
   style?: Partial<CSSStyleDeclaration>,
   /**
-   * You don't need to use other properties if you set `element`.
-   */
-  element?: string | (<Data>(data: Data, close: (result: MIResult) => void, item: ModalItem<UIElementType>) => UIElementType),
-  /**
    * Clear default inline stlye.
    */
   clearDefaultInlineStyle?: boolean
@@ -107,25 +105,29 @@ export interface HTMLModalAddItemOptions<UIElementType> {
    */
   type: MITypes,
   /**
-   * Component of UI Element.
+   * Component of UI Element. Including `container`, `header`, `body` and `footer`.
+   * You can configure the default UI of each component with:
+   * - Options for the default: it will not modify the structure of Modal Item.
+   * - function: Build you own Modal Item.
+   * - HTML String: the simplest way :D.
    */
   components?: {
     /**
      * UI Element of Modal Item Container.
      */
-    container?: MIContainer<UIElementType>,
+    container?: MIContainer<UIElementType> | string | (<Data>(close: (result: MIResult) => void, item: ModalItem<UIElementType>, data?: Data) => UIElementType),
     /**
      * UI Element of Modal Item Header.
      */
-    header?: MIHeader<UIElementType>,
+    header?: MIHeader<UIElementType> | string | (<Data>(close: (result: MIResult) => void, item: ModalItem<UIElementType>, data?: Data) => UIElementType),
     /**
      * UI Element of Modal Item Body.
      */
-    body?: MIBody<UIElementType>,
+    body?: MIBody<UIElementType> | string | (<Data>(close: (result: MIResult) => void, item: ModalItem<UIElementType>, data?: Data) => UIElementType),
     /**
      * UI Element of Modal Item Footer.
      */
-    footer?: MIFooter<UIElementType>,
+    footer?: MIFooter<UIElementType> | string | (<Data>(close: (result: MIResult) => void, item: ModalItem<UIElementType>, data?: Data) => UIElementType),
   }
   /**
    * Clear all default inline style.

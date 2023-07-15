@@ -1,7 +1,7 @@
 const defaultOptions: KeyframeAnimationOptions = {
   duration: 200,
   fill: "forwards",
-  easing: "ease-in"
+  easing: "cubic-bezier(0.33, 1, 0.68, 1)"
 }
 
 type MoveFrom = "Left" | "Right" | "Top" | "Bottom";

@@ -12,15 +12,14 @@ export const SnackbarComponentsStyle: {[key in MIUIStyleNameEnum]: Partial<CSSSt
     display: "flex",
     flexDirection: "row",
     width: "100%",
-    maxWidth: "480px",
-    minWidth: "300px",
+    maxWidth: "300px",
+    minWidth: "200px",
     height: "fit-content",
     maxHeight: "120px",
     minHeight: "50px",
     zIndex: "9999",
     backgroundColor: `${ColorValues.background}`,
-    ...BoxShadowStyles.BShadow1,
-    ...SpacingStyles.M1,
+    ...BoxShadowStyles.BShadow4,
     ...ShapeStyles.Rounded8
   },
 
@@ -56,35 +55,45 @@ export const SnackbarPositionStyles: {[key in SnackBarPositions]: Partial<CSSSty
   Top: {
     top: "0",
     left: "50%",
-    transform: "translate(-50%, 0)"
+    transform: "translate(-50%, 0)",
+    ...SpacingStyles.Mt1
   },
 
   TopRight: {
     top: "0",
     right: "0",
     // transform: "translate(-100%, 0)",
+    ...SpacingStyles.Mt1,
+    ...SpacingStyles.Me1
   },
 
   TopLeft: {
     top: "0",
-    left: "0"
+    left: "0",
+    ...SpacingStyles.Mt1,
+    ...SpacingStyles.Ms1
   },
 
   Bottom: {
     bottom: "0",
     left: "50%",
-    transform: "translate(-50%, 0)"
+    transform: "translate(-50%, 0)",
+    ...SpacingStyles.Mb1
   },
 
   BottomRight: {
     bottom: "0",
     right: "0",
-    // transform: "translate(-100%, -100%)"
+    // transform: "translate(-100%, -100%)",
+    ...SpacingStyles.Mb1,
+    ...SpacingStyles.Me1
   },
 
   BottomLeft: {
     bottom: "0",
     left: "0",
-    // transform: "translate(0, -100%)"
+    // transform: "translate(0, -100%)",
+    ...SpacingStyles.Mb1,
+    ...SpacingStyles.Ms1
   }
 }
