@@ -152,7 +152,9 @@ side({
   content: list
 });
 ```
+__Kết quả__
 
+![image](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/assets/86825061/a0f02403-47c5-4211-bc2e-cc5361252278)
 
 ## Snackbar
 <a href="#snackbar"></a>
@@ -188,3 +190,168 @@ __Kết quả__
 Với những cách dùng ở trên thì các bạn có thể thấy rất dễ để xử dụng, tuy nhien thì cái này chỉ dùng trong trường hợp bạn không muốn hiển thị ra dialog, side quá phức tạp (snackbar thì đơn giản thôi, còn side thì mình khuyên là nên tự custom). Các thuộc tính trên truyền vào là nhũng dữ liệu mặc định mà bạn muốn thay đổi UI của item mặc định hoặc gán dữ liệu vào item mặc định. Nhưng giờ bạn muốn lấy dữ liệu một cách phức tạp hơn thì sao? Cho nên là mình hỗ trợ thên cho các bạn function `createModal` dùng để tự tạo ra một object quản lý các modal item.
 
 Nhận vào một object gồm 2 thuộc tính:
+- `className`: thay để class mặc định của modal container là `tunangn-modal`. Và bạn phải viết css cho phù hợp nếu như bạn thay thế tên class mặc định. Ngoài ra nếu như các modal được tạo nên cùng một className, ví dụ như là
+```js
+const modal1 = createModal({
+  className: "my-modal",
+  ...
+});
+
+const modal2 = createModal({
+  className: "my-modal",
+  ...
+});
+```
+Thì 2 object modal này sẽ có cùng một modal container.
+
+- `items`: là một mảng nhận vào các thuộc tính dùng để build modal item. Các object này bao gồm các thuộc tính như sau:
+  - `name`: [__Bắt buộc__] là tên của item.
+  - `type`: [__Bắt buộc__] là loại item. Có 3 loại như các bạn đã biết là `dialog`, `side` và `snackbar`.
+  - `components` là một object chứa các UI Element của item, bao gồm `container`, `header`, `body` và `footer`.
+    - `container`: các bạn có thể dùng chuỗi html để custom nhanh, nhưng mình không khuyến khích các bạn custom cái này.
+    - `header`: custom lại header.
+    - `body`: custom lại phần body.
+    - `footer`: custom lại phần footer.
+    Các thuộc tính này sẽ nhận vào một chuỗi (HTML), function hoặc là một object. Cụ thể như thế nào thì mình xuống phần hướng dẫn.
+
+### Xây dựng một modal có chứa dialog, right side và top-right snackbar.
+Các UI Element sau khi được tạo từ `createModal` là những UI Element mặc định, tuy nhiên các bạn có thể CUSTOM được nó. `createModal` sẽ trả về một function,
+function này giúp các bạn có thể mở được các modal vừa mới assign ở bên trong.
+
+Ở ví dụ bên dưới mình không thay thế class name và container của item. Và mình sẽ build side và dialog, snackbar thì không cần lắm (nếu như các bạn muốn thì làm theo mình là được). Ngoài ra thì dialog một vài chỗ mình dùng inline style và không style, cho nên sẽ hơi xấu và bất tiện, còn nếu có class và style thì sẽ đẹp hơn.
+```js
+// Import createModal
+import { createModal } from "./node_modules/tunangn-html-modal/build/index.js";
+
+let dialogName= "myDialog";
+let sideName = "myRightSide";
+
+const open = createModal({
+  items: [
+    {
+      /*
+        Mình sẽ tạo dialog, và custom lại phần content của nó.
+      */
+      name: dialogName,
+      type: "dialog",
+      components: {
+        // Với function thì nó sẽ nhận vào 3 giá trị là close (function), item (object), data (object as any).
+        // Ở đây mình sẽ tạo ra một form nhỏ, và đồng thời sẽ lấy dữ liệu từ form này.
+        body: function(close, item) {
+          const div = document.createElement("div");
+          const form = document.createElement("form");
+          const content = document.createElement("div");
+
+          const data = item.getData();
+
+          const onSubmit = e => {
+            e.preventDefault();
+            const username = e.target["username"].value;
+            const password = e.target["password"].value;
+
+            close({ data: { username, password }, isAgree: true });
+          };
+
+          const formContentHTML = `
+            <div><label>Tài khoản: <input name="username" type="text" /></label></div>
+            <div><label>Mật khẩu: <input name="password" type="password" /></label></div>
+            <input type="submit" value="Đăng nhập" />
+          `;
+
+          const contentHTML = `
+            <div>
+              <h3>${data.label}</h3>
+              <p style="color: red">${data.text}</p>
+            </div>
+          `;
+
+          div.style.margin = "0.75rem";
+
+          form.innerHTML = formContentHTML;
+          form.onsubmit = onSubmit;
+
+          content.innerHTML = contentHTML;
+
+          div.append(content, form);
+
+          return div;
+        },
+
+        // Mình muốn ẩn footer đi thì mình truyên vào null.
+        footer: null
+      }
+    }
+  ]
+});
+
+// Mở dialog và truyền dữ liệu cho label và text.
+// Các data mặc định sẽ vẫn hoạt động, nếu như các bạn không ghi đè lên component.
+// Ví dụ như ở trên mình ghi đè lên body, cho nên mình không thể truyền content vào được nữa
+// có truyền được thì cũng không có gì xảy ra
+open(dialogName, {
+  title: "Form đăng nhập",
+  label: "Đăng nhập",
+  text: "Đây là nội dung sẽ được truyền vào trong hộp thoại."
+}).then(console.log);
+```
+
+__Kết quả__
+Giờ thì mình sẽ nhập thêm username và password, mình sẽ được kết quả như sau:
+
+![image](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/assets/86825061/b668aae5-5d27-474f-8fcb-d38e68c6d5e5)
+
+Ấn nút đăng nhập thì sẽ nhận được một kết quả.
+
+![image](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/assets/86825061/b541669f-824a-4037-b324-77f20c7a083c)
+
+Rẩt dễ đúng không? Giờ thì mình sẽ làm tiếp Side, nhưng nó sẽ ở vị trí bên phải. Side này giống với trên ví dụ trước, đồng thời mình sẽ sửa lại snackbar ở ví dụ snackbar
+```js
+const open = createModal({
+  items: [
+    // Dialog
+    {...},
+    {
+      name: sideName,
+      type: "side",
+      placeOn: "right",
+      components: {
+        // Ở body mình fix cứng dữ liệu, nếu như các bạn muốn nhận các thông tin từ bên ngoài thì có thể dùng function để build.
+        body: `<ul style="height: 100%">
+          <li>Đây là item đầu tiên</li>
+          <li>Đây là item thứ hai</li>
+          <li>Đây là item thứ ba</li>
+          <li>Đây là item thứ tư</li>
+          <li>Đây là item thứ năm và cũng là cuối cùng</li>
+        </ul>`,
+
+        footer: function(close) {
+          const button = document.createElement("button");
+          button.textContent = "Thoát";
+          button.style.padding = "1rem";
+          button.onclick = close
+          return button;
+        }
+      }
+    }
+  ]
+});
+
+// Giờ thì mở dialog này lên.
+open(sideName, { title: "Hồ sơ cá nhân" }).then(() => {
+  snackbar({
+    title: `<span class="material-symbols-outlined fill">cancel</span>`,
+    content: "Bạn đã đăng xuất!",
+    color: "#F54242",
+    duration: 3000
+  });
+});
+```
+
+__Kết quả__
+
+![image](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/assets/86825061/a48390cd-9a5d-4997-9896-39c0ff18f70a)
+
+Giờ mình ấn thoát
+![image](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/assets/86825061/a28f9b87-8494-4924-b431-5442c900fbd2)
+
+Ok như vậy là đã xong. Nếu như có vấn đề gì trong quá trình sử dụng các bạn có thể viết issue trực tiếp trong repo này nhé. Mình sẽ cập nhật thêm để cho các bạn có thể dễ sử dụng hơn.
