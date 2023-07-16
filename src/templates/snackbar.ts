@@ -1,4 +1,4 @@
-import { MIResult, Snackbar } from "tunangn-modal"
+import { MIResult, PublicModalItemProps } from "tunangn-modal";
 
 import { MoveAnim } from "../animations/move";
 
@@ -16,10 +16,11 @@ import {
 function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Snackbar<HTMLDivElement>,
-    data?: SnackbarDefaultData,
+    item: PublicModalItemProps
   ) {
     let container = options.components?.container;
+    let data = item.getData() as SnackbarDefaultData;
+
     if(
       typeof container === "string"
       || typeof container === "function"
@@ -102,10 +103,14 @@ function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Snackbar<HTMLDivElement>,
-    data?: SnackbarDefaultData,
+    item: PublicModalItemProps,
   ) {
     let header = options.components?.header;
+    let data = item.getData() as SnackbarDefaultData;
+
+    // Header can be null
+    if(header === null) return null;
+
     if(
       typeof header === "string"
       || typeof header === "function"
@@ -123,6 +128,7 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     if(header?.style) ElementUtils.addStyle(divEle, header?.style);
     else if(!clearInlineStyle) {
       ElementUtils.addStyle(divEle, SnackbarComponentsStyle.Header);
+      data?.color && (divEle.style.backgroundColor = data?.color);
     }
 
     // Setup header's components
@@ -138,10 +144,14 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Snackbar<HTMLDivElement>,
-    data?: SnackbarDefaultData,
+    item: PublicModalItemProps
   ) {
     let body = options.components?.body;
+    let data = item.getData() as SnackbarDefaultData;
+
+    // Body can be null
+    if(body === null) return null;
+
     if(
       typeof body === "string"
       || typeof body === "function"
@@ -172,10 +182,14 @@ function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 function buildFooter(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Snackbar<HTMLDivElement>,
-    data?: SnackbarDefaultData
+    item: PublicModalItemProps
   ) {
     let footer = options.components?.footer;
+    let data = item.getData() as SnackbarDefaultData;
+    
+    // Footer can be null
+    if(footer === null) return null;
+
     if(
       typeof footer === "string"
       || typeof footer === "function"

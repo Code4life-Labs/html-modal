@@ -1,4 +1,4 @@
-import { MIResult, Dialog } from "tunangn-modal";
+import { MIResult, PublicModalItemProps } from "tunangn-modal";
 
 import { ElementUtils } from "../utils/element";
 
@@ -14,10 +14,11 @@ import {
 function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Dialog<HTMLDivElement>,
-    data?: DialogDefaultData
+    item: PublicModalItemProps
   ) {
     let container = options?.components?.container;
+    let data = item.getData() as DialogDefaultData;
+
     if(
       typeof container === "string"
       || typeof container === "function"
@@ -39,10 +40,14 @@ function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Dialog<HTMLDivElement>,
-    data?: DialogDefaultData
+    item: PublicModalItemProps
   ) {
     let header = options?.components?.header;
+    let data = item.getData() as DialogDefaultData;
+
+    // Header can be null
+    if(header === null) return null;
+
     if(
       typeof header === "string"
       || typeof header === "function"
@@ -64,7 +69,6 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
       ElementUtils.addStyle(closeBtn, ButtonStyles.BtnClose);
     }
 
-
     // Setup header's components
     titlePEle.innerHTML = headerTitle;
 
@@ -81,10 +85,14 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Dialog<HTMLDivElement>,
-    data?: DialogDefaultData
+    item: PublicModalItemProps
   ) {
     let body = options?.components?.body;
+    let data = item.getData() as DialogDefaultData;
+
+    // Body can be null
+    if(body === null) return null;
+
     if(
       typeof body === "string"
       || typeof body === "function"
@@ -119,22 +127,29 @@ function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
 function buildFooter(options: HTMLModalAddItemOptions<HTMLDivElement>) {
   return function(
     close: (result: MIResult) => void,
-    item: Dialog<HTMLDivElement>,
-    data?: DialogDefaultData
+    item: PublicModalItemProps
   ) {
     let footer = options?.components?.footer;
+    let data = item.getData() as DialogDefaultData;
+    
+    // Footer can be null
+    if(footer === null) return null;
+    
     if(
       typeof footer === "string"
       || typeof footer === "function"
     ) return ElementUtils.getHTMLElementFromOptions(footer, { close, item, data });
     let divEle = document.createElement("div");
-    let closeBtn = document.createElement("button");
-    let agreeBtn = document.createElement("button");
+    let closeBtn;
+    let agreeBtn;
+
+    let closeBtnStyle;
+    let agreeBtnStyle;
 
     let clearInlineStyle = options.clearAllDefaultInlineStyle || footer?.clearDefaultInlineStyle;
 
-    let closeBtnLbl = data?.closeBtnLabel || "Cancel";
-    let agreeBtnLbl = data?.agreeBtnLabel || "Ok";
+    let closeBtnLbl: string;
+    let agreeBtnLbl: string;
 
     // Set class for Modal Item Footer
     divEle.classList.add(footer?.className ? footer.className : "tunangn-dialog-footer");
@@ -142,24 +157,48 @@ function buildFooter(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     // Set custom style for Modal Item Footer
     if(footer?.style) ElementUtils.addStyle(divEle, footer?.style);
     else if(!clearInlineStyle) {
-      let closeBtnStyle = ElementUtils.mergeStyles(ButtonStyles.Btn, ButtonStyles.BtnWhite, ButtonStyles.BtnBorder, SpacingStyles.Me1);
-      let agreeBtnStyle = ElementUtils.mergeStyles(ButtonStyles.Btn, ButtonStyles.BtnBlue, ButtonStyles.BtnBorder);
+      closeBtnStyle = ElementUtils.mergeStyles(
+        ButtonStyles.Btn,
+        ButtonStyles.BtnWhite,
+        ButtonStyles.BtnBorder,
+        data?.agreeBtnLabel === null ? {} : SpacingStyles.Me1
+      );
+      agreeBtnStyle = ElementUtils.mergeStyles(ButtonStyles.Btn, ButtonStyles.BtnBlue, ButtonStyles.BtnBorder);
       
       ElementUtils.addStyle(divEle, DialogComponentsStyle.Footer);
-      ElementUtils.addStyle(closeBtn, closeBtnStyle);
-      ElementUtils.addStyle(agreeBtn, agreeBtnStyle);
     };
 
-    // Set 2 buttons' content
-    closeBtn.textContent = closeBtnLbl;
-    agreeBtn.textContent = agreeBtnLbl;
+    if(data?.closeBtnLabel !== null) {
+      closeBtn = document.createElement("button");
+      closeBtnLbl = data?.closeBtnLabel || "Cancel";
 
-    // Add close actions
-    closeBtn.onclick = () => close({ isAgree: false });
-    agreeBtn.onclick = () => close({ isAgree: true });
+      // Add button label
+      closeBtn.textContent = closeBtnLbl;
 
-    // Append to Footer
-    divEle.append(closeBtn, agreeBtn);
+      // Add close action
+      closeBtn.onclick = () => close({ isAgree: false });
+
+      // Add style
+      closeBtnStyle && ElementUtils.addStyle(closeBtn, closeBtnStyle);
+
+      divEle.append(closeBtn);
+    }
+
+    if(data?.agreeBtnLabel !== null) {
+      agreeBtn = document.createElement("button");
+      agreeBtnLbl = data?.agreeBtnLabel || "Ok";
+
+      // Add button label
+      agreeBtn.textContent = agreeBtnLbl;
+
+      // Add close action
+      agreeBtn.onclick = () => close({ isAgree: true });
+
+      // Add style
+      agreeBtnStyle && ElementUtils.addStyle(agreeBtn, agreeBtnStyle);
+
+      divEle.append(agreeBtn);
+    }
 
     return divEle;
   }

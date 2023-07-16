@@ -4,6 +4,7 @@
  * Snackbar
  * Side
  */
+import { MIResult } from "tunangn-modal";
 import { createModal } from "./creators/createModal";
 import {
   DialogDefaultData,
@@ -47,6 +48,7 @@ const open = createModal({
  * @returns 
  */
 export function dialog(data: DialogDefaultData) {
+  // Default Modal Object cannot be created when user import this.
   return open!(DEFAULT_MODAL_ITEM_NAMES.DIALOG, data);
 }
 
@@ -56,6 +58,7 @@ export function dialog(data: DialogDefaultData) {
  * @returns 
  */
 export function snackbar(data: SnackbarDefaultData) {
+  // Default Modal Object cannot be created when user import this.
   return open!(DEFAULT_MODAL_ITEM_NAMES.SNACKBAR, data);
 }
 
@@ -65,5 +68,6 @@ export function snackbar(data: SnackbarDefaultData) {
  * @returns 
  */
 export function side(data: SideDefaultData) {
+  // Default Modal Object cannot be created when user import this.
   return open!(DEFAULT_MODAL_ITEM_NAMES.SIDE, data);
 }

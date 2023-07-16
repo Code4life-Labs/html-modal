@@ -1,4 +1,4 @@
-import { MITypes, MIResult, ModalItem } from "tunangn-modal";
+import { MITypes, MIResult, ModalItem, PublicModalItemProps } from "tunangn-modal";
 
 export enum MIUIStyleNameEnum {
   Container = "Container",
@@ -24,11 +24,11 @@ export interface DialogDefaultData extends MIUIDefaultData {
   /**
    * Label of Close button.
    */
-  closeBtnLabel?: string,
+  closeBtnLabel?: string | null,
   /**
    * Label of Agree button.
    */
-  agreeBtnLabel?: string
+  agreeBtnLabel?: string | null
 }
 
 export interface SnackbarDefaultData extends MIUIDefaultData {
@@ -76,11 +76,12 @@ export interface MIContainer<UIElementType> extends MIUIComponent<UIElementType>
 }
 
 export interface MIHeader<UIElementType> extends MIUIComponent<UIElementType> {
+  
   /**
    * Let you know when the close button is enable
    * @returns 
    */
-  closeEnableWhen?: () => Promise<boolean>
+  // closeEnableWhen?: () => Promise<boolean>
 }
 
 export interface MIBody<UIElementType> extends MIUIComponent<UIElementType> {
@@ -92,7 +93,7 @@ export interface MIFooter<UIElementType> extends MIUIComponent<UIElementType> {
    * Let you know when the close button is enable
    * @returns 
    */
-  agreeEnableWhen?: () => Promise<boolean>
+  // agreeEnableWhen?: () => Promise<boolean>
 }
 
 export interface HTMLModalAddItemOptions<UIElementType> {
@@ -115,19 +116,19 @@ export interface HTMLModalAddItemOptions<UIElementType> {
     /**
      * UI Element of Modal Item Container.
      */
-    container?: MIContainer<UIElementType> | string | (<Data>(close: (result: MIResult) => void, item: ModalItem<UIElementType>, data?: Data) => UIElementType),
+    container?: MIContainer<UIElementType> | string | ((close: (result: MIResult) => void, item: PublicModalItemProps) => UIElementType),
     /**
      * UI Element of Modal Item Header.
      */
-    header?: MIHeader<UIElementType> | string | (<Data>(close: (result: MIResult) => void, item: ModalItem<UIElementType>, data?: Data) => UIElementType),
+    header?: MIHeader<UIElementType> | string | ((close: (result: MIResult) => void, item: PublicModalItemProps) => UIElementType) | null,
     /**
      * UI Element of Modal Item Body.
      */
-    body?: MIBody<UIElementType> | string | (<Data>(close: (result: MIResult) => void, item: ModalItem<UIElementType>, data?: Data) => UIElementType),
+    body?: MIBody<UIElementType> | string | ((close: (result: MIResult) => void, item: PublicModalItemProps) => UIElementType) | null,
     /**
      * UI Element of Modal Item Footer.
      */
-    footer?: MIFooter<UIElementType> | string | (<Data>(close: (result: MIResult) => void, item: ModalItem<UIElementType>, data?: Data) => UIElementType),
+    footer?: MIFooter<UIElementType> | string | ((close: (result: MIResult) => void, item: PublicModalItemProps) => UIElementType) | null,
   }
   /**
    * Clear all default inline style.

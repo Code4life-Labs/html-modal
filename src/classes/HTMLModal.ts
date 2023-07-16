@@ -76,8 +76,10 @@ export class HTMLModal {
       );
       
       document.addEventListener("DOMContentLoaded", () => {
-        let existingModalContainer = document.body.querySelector(`[data-uid='${options?.className || HTMLModal._uid}']`);
+        console.log("Init HTML Modal");
         this._modal = new Modal();
+        console.log(this._modal);
+        let existingModalContainer = document.body.querySelector(`[data-uid='${options?.className || HTMLModal._uid}']`);
         if(existingModalContainer) this._modal.container = existingModalContainer as HTMLDivElement;
         else {
           this._modal.container = document.createElement("div");
@@ -125,31 +127,37 @@ export class HTMLModal {
    */
   open<DTType>(name: string, data?: DTType) {
     try {
-      let item = this._modal.getItem(name)!;
-      // Set data for item.
-      item.setData(data);
+      let that = this;
+      return new Promise<MIResult>((resolve) => {
+        setTimeout(() => {
+          let item = that._modal.getItem(name)!;
+          // Set data for item.
+          item.setData(data);
 
-      // Show modal container first
-    this._modal.container!.style.display = "block";
+          // Show modal container first
+          that._modal.container!.style.display = "block";
 
-    switch(item.type) {
-      case "dialog": {
-        ElementUtils.addStyle(this._modal.container!, ModalStyles.TranparentBlackBG);
-        break;
-      };
+          switch(item.type) {
+            case "dialog": {
+              ElementUtils.addStyle(that._modal.container!, ModalStyles.TranparentBlackBG);
+              break;
+            };
 
-      case "side": {
-        ElementUtils.addStyle(this._modal.container!, ModalStyles.TranparentBlackBG);
-        break;
-      };
+            case "side": {
+              ElementUtils.addStyle(that._modal.container!, ModalStyles.TranparentBlackBG);
+              break;
+            };
 
-      case "snack-bar": {
-        this._modal.container!.style.pointerEvents = "none";
-        break;
-      }
-    }
+            case "snack-bar": {
+              that._modal.container!.style.pointerEvents = "none";
+              break;
+            }
+          }
 
-      return item.open(this._append, this._remove);
+          item.open(that._append, that._remove)
+          .then(result => resolve(result));
+        }, 0);
+      });
     } catch (error: any) {
       console.error(ExceptionUtils.getException("[Error - HTMLModal method: open]: " + error.message));
       return Promise.reject(false);
