@@ -168,9 +168,9 @@ function buildFooter(options: HTMLModalAddItemOptions<HTMLDivElement>) {
       ElementUtils.addStyle(divEle, DialogComponentsStyle.Footer);
     };
 
-    if(data?.closeBtnLabel !== null) {
+    if(data?.cancelBtnLabel !== null) {
       closeBtn = document.createElement("button");
-      closeBtnLbl = data?.closeBtnLabel || "Cancel";
+      closeBtnLbl = data?.cancelBtnLabel || "Cancel";
 
       // Add button label
       closeBtn.textContent = closeBtnLbl;

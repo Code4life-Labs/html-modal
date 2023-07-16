@@ -2,17 +2,17 @@
   "name": "tunangn-html-modal",
   "version": "1.5.0",
   "description": "Use to show dialog, message for HTML",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "build/**/*"
+    "dist/**/*"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "build:bundle": "rimraf bundle && tsc -p tsconfig.bundle.json",
-    "build:webpack": "rimraf build && webpack",
-    "build:rollup": "rimraf build && rollup -c --bundleConfigAsCjs"
+    "build:webpack": "rimraf dist && webpack",
+    "build:rollup": "rimraf dist && rollup -c --bundleConfigAsCjs"
   },
   "keywords": [
     "html-modal",
@@ -22,6 +22,10 @@
     "snackbar",
     "side"
   ],
+  "bugs": {
+    "url": "https://github.com/NguyenAnhTuan1912/tunangn-html-modal/issues"
+  },
+  "homepage": "https://github.com/NguyenAnhTuan1912/tunangn-html-modal",
   "author": "Nguyen Anh Tuan",
   "license": "MIT",
   "devDependencies": {

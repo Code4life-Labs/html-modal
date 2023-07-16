@@ -4,14 +4,14 @@ Trong package hỗ trợ 3 items mặc định mà các bạn có thể dùng ng
 - `Side`: phần nội dung chiếm chiều cao bằng chiều cao màn hình, có thể nằm ở bên trái hoặc phải.
 - `Snackbar`: phần nội dung (thanh ngang), có thể nằm 1 trong 6 vị trí như là góc trên phải, trên cùng, góc trên trái, góc dưới trái, dưới cùng và góc dưới phải.
 
-Các bạn có thể import các function như là `dialog`, `snackbar` hoặc `side` từ "" (cài đặt thông qua npm) hoặc từ "" (thông qua CDN Link). Ở đây thì mình lấy ví dụ
+Các bạn có thể import các function như là `dialog`, `snackbar` hoặc `side` từ "./node_modules/tunangn-html-modal/dist/index.js" (cài đặt thông qua npm) hoặc từ "" (thông qua CDN Link). Ở đây thì mình lấy ví dụ
 qua npm.
 
 Các object này đều nhận 2 thuộc tính như nhau là:
 - `title`: đổi thông tin ở phần __header__. Các bạn có thể dùng chuỗi HTML.
 - `content`: đổi thông tin ở phần __body__. Các bạn có thể dùng chuỗi HTML.
 
-Và tuỳ thuộc vào lựa chọn __huỷ__ hay __đồng ý__ thì Dialog sẽ trả về một kết quả được resolve từ Promise, dữ liệu này bao gồm những thuộc tính sau:
+Và tuỳ thuộc vào lựa chọn __huỷ__ hay __đồng ý__ thì Modal Item sẽ trả về một kết quả được resolve từ Promise, dữ liệu này bao gồm những thuộc tính sau:
 ```ts
 {
   isAgree: boolean,
@@ -36,11 +36,11 @@ Xem hướng dẫn chi tiết tự xây dựng dialog, side và snackbar [tại 
 __*Lưu ý*__: Các hướng dẫn dưới đây đều là từ dialog mặc định.
 
 Một số thuộc tính riêng của `dialog`:
-- `closeBtnLabel`: đổi label cho nút huỷ. Ngoài ra nếu bạn truyền vào cho nó là `null`, thì nút `huỷ` không hiển thị. Tuy nhiên nếu như bạn truyền `undefined` thì nó vẫn hiển thị và có label mặc định.
+- `cancelBtnLabel`: đổi label cho nút huỷ. Ngoài ra nếu bạn truyền vào cho nó là `null`, thì nút `huỷ` không hiển thị. Tuy nhiên nếu như bạn truyền `undefined` thì nó vẫn hiển thị và có label mặc định.
 - `agreeBtnLabel`: đổi label cho nút đồng ý. Ngoài ra nếu bạn truyền vào cho nó là `null`, thì nút `đồng ý` không hiển thị. Tuy nhiên nếu như bạn truyền `undefined` thì nó vẫn hiển thị và có label mặc định.
 
 ### Hiển thị dialog MẶC ĐỊNH với một vài thuộc tính.
-Bây giờ mình sẽ hiển thị một dialog với `title`, `content`, `closeBtnLabel` và `agreeBtnLabel` như sau:
+Bây giờ mình sẽ hiển thị một dialog với `title`, `content`, `cancelBtnLabel` và `agreeBtnLabel` như sau:
 ```js
 import { dialog } from "./node_modules/tunangn-html-modal/dist/index.js";
 
@@ -48,7 +48,7 @@ import { dialog } from "./node_modules/tunangn-html-modal/dist/index.js";
 dialog({
   title: "Đây là hộp thoại",
   content: "Đây là nội dung của hộp thoại!!",
-  closeBtnLabel: "Huỷ",
+  cancelBtnLabel: "Huỷ",
   agreeBtnLabel: "Đồng ý"
 });
 ```
@@ -70,7 +70,7 @@ let htmlTitle = `
 dialog({
   title: htmlTitle,
   content: "Đây là nội dung của hộp thoại!!",
-  closeBtnLabel: "Huỷ",
+  cancelBtnLabel: "Huỷ",
   agreeBtnLabel: "Đồng ý"
 });
 ```
@@ -86,7 +86,7 @@ Và để cho đơn giản thì mình sẽ dùng `dialog` ở ví dụ đầu ti
 dialog({
   title: "Đây là hộp thoại",
   content: "Bạn có đồng ý với điều khoản này không?",
-  closeBtnLabel: "Không đồng ý",
+  cancelBtnLabel: "Không đồng ý",
   agreeBtnLabel: "Đồng ý"
 })
 .then(result => {
@@ -96,14 +96,14 @@ dialog({
       title: "Bạn đã đồng ý",
       content: "Cảm ơn bạn đã đồng ý với điều khoản của chúng tôi :D",
       // Truyền null để bỏ nút huỷ
-      closeBtnLabel: null,
+      cancelBtnLabel: null,
       agreeBtnLabel: "Tiếp tục"
     })
   } else {
     dialog({
       title: "Bạn không đồng ý",
       content: "Điểu khoản có gì làm bạn bận tâm sao?",
-      closeBtnLabel: "Trở lại",
+      cancelBtnLabel: "Trở lại",
       // Truyền null để bỏ nút đồng ý.
       agreeBtnLabel: null
     })
@@ -188,7 +188,7 @@ __Kết quả__
 
 ## Xây dựng dialog, side và snackbar
 <a name="building"></a>
-Với những cách dùng ở trên thì các bạn có thể thấy rất dễ để xử dụng, tuy nhien thì cái này chỉ dùng trong trường hợp bạn không muốn hiển thị ra dialog, side quá phức tạp (snackbar thì đơn giản thôi, còn side thì mình khuyên là nên tự custom). Các thuộc tính trên truyền vào là nhũng dữ liệu mặc định mà bạn muốn thay đổi UI của item mặc định hoặc gán dữ liệu vào item mặc định. Nhưng giờ bạn muốn lấy dữ liệu một cách phức tạp hơn thì sao? Cho nên là mình hỗ trợ thên cho các bạn function `createModal` dùng để tự tạo ra một object quản lý các modal item.
+Với những cách dùng ở trên thì các bạn có thể thấy rất dễ để xử dụng, tuy nhien thì cái này chỉ dùng trong trường hợp bạn không muốn hiển thị ra dialog, side quá phức tạp (snackbar thì đơn giản thôi, còn side thì mình khuyên là nên tự custom). Các thuộc tính trên truyền vào là nhũng dữ liệu mặc định mà bạn muốn thay đổi UI của item mặc định hoặc gán dữ liệu vào item mặc định. Nhưng giờ bạn muốn lấy dữ liệu một cách phức tạp hơn thì sao? Cho nên là mình hỗ trợ thên cho các bạn function `createModal` dùng để tự tạo ra một object quản lý các modal items.
 
 Nhận vào một object gồm 2 thuộc tính:
 - `className`: thay để class mặc định của modal container là `tunangn-modal`. Và bạn phải viết css cho phù hợp nếu như bạn thay thế tên class mặc định. Ngoài ra nếu như các modal được tạo nên cùng một className, ví dụ như là
@@ -215,9 +215,8 @@ Thì 2 object modal này sẽ có cùng một modal container.
     - `footer`: custom lại phần footer.
     Các thuộc tính này sẽ nhận vào một chuỗi (HTML), function hoặc là một object. Cụ thể như thế nào thì mình xuống phần hướng dẫn.
 
-### Xây dựng một modal có chứa dialog, right side và top-right snackbar.
-Các UI Element sau khi được tạo từ `createModal` là những UI Element mặc định, tuy nhiên các bạn có thể CUSTOM được nó. `createModal` sẽ trả về một function,
-function này giúp các bạn có thể mở được các modal vừa mới assign ở bên trong.
+### Xây dựng một modal có chứa dialog và right side
+Các UI Element sau khi được tạo từ `createModal` là những UI Element mặc định, tuy nhiên các bạn có thể CUSTOM được nó. `createModal` sẽ trả về một function, function này giúp các bạn có thể mở được các modal vừa mới assign ở bên trong.
 
 Ở ví dụ bên dưới mình không thay thế class name và container của item. Và mình sẽ build side và dialog, snackbar thì không cần lắm (nếu như các bạn muốn thì làm theo mình là được). Ngoài ra thì dialog một vài chỗ mình dùng inline style và không style, cho nên sẽ hơi xấu và bất tiện, còn nếu có class và style thì sẽ đẹp hơn.
 ```js
@@ -236,7 +235,7 @@ const open = createModal({
       name: dialogName,
       type: "dialog",
       components: {
-        // Với function thì nó sẽ nhận vào 3 giá trị là close (function), item (object), data (object as any).
+        // Với function thì nó sẽ nhận vào 2 tham số là close (function), item (object).
         // Ở đây mình sẽ tạo ra một form nhỏ, và đồng thời sẽ lấy dữ liệu từ form này.
         body: function(close, item) {
           const div = document.createElement("div");
@@ -337,7 +336,7 @@ const open = createModal({
   ]
 });
 
-// Giờ thì mở dialog này lên.
+// Giờ thì mở right side này lên.
 open(sideName, { title: "Hồ sơ cá nhân" }).then(() => {
   snackbar({
     title: `<span class="material-symbols-outlined fill">cancel</span>`,
@@ -353,6 +352,7 @@ __Kết quả__
 ![image](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/assets/86825061/a48390cd-9a5d-4997-9896-39c0ff18f70a)
 
 Giờ mình ấn thoát
+
 ![image](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/assets/86825061/a28f9b87-8494-4924-b431-5442c900fbd2)
 
 Ok như vậy là đã xong. Nếu như có vấn đề gì trong quá trình sử dụng các bạn có thể viết issue trực tiếp trong repo này nhé. Mình sẽ cập nhật thêm để cho các bạn có thể dễ sử dụng hơn.

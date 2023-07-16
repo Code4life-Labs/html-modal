@@ -24,7 +24,7 @@ export interface DialogDefaultData extends MIUIDefaultData {
   /**
    * Label of Close button.
    */
-  closeBtnLabel?: string | null,
+  cancelBtnLabel?: string | null,
   /**
    * Label of Agree button.
    */
