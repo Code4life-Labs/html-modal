@@ -32,7 +32,7 @@ Xem hướng dẫn chi tiết cho Snackbar [tại đây](#snackbar).
 Xem hướng dẫn chi tiết tự xây dựng dialog, side và snackbar [tại đây](#building)
 
 ## Dialog
-<a href="#dialog"></a>
+<a name="dialog"></a>
 __*Lưu ý*__: Các hướng dẫn dưới đây đều là từ dialog mặc định.
 
 Một số thuộc tính riêng của `dialog`:
@@ -127,7 +127,7 @@ Ok như vậy là đã xong phần cơ bản của dialog. Giờ thì mình sẽ
 
 
 ## Side
-<a href="#side"></a>
+<a name="side"></a>
 __*Lưu ý*__: Các hướng dẫn dưới đây đều là từ side mặc định.
 Side thì không có thuộc tính gì mặc định, và nó sẽ xuất hiện ở bên trái màn hình của các bạn.
 
@@ -157,7 +157,7 @@ __Kết quả__
 ![image](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/assets/86825061/a0f02403-47c5-4211-bc2e-cc5361252278)
 
 ## Snackbar
-<a href="#snackbar"></a>
+<a name="snackbar"></a>
 __*Lưu ý*__: Các hướng dẫn dưới đây đều là từ snackbar mặc định.
 Snackbar là một thanh thông báo nhỏ trên cùng của màn hình. Sau 7s thì nó sẽ tự động đóng.
 
@@ -187,6 +187,7 @@ __Kết quả__
 2 thuộc tính còn lại thì mình không test ở đây, vì các bạn sẽ không thấy được.
 
 ## Xây dựng dialog, side và snackbar
+<a name="building"></a>
 Với những cách dùng ở trên thì các bạn có thể thấy rất dễ để xử dụng, tuy nhien thì cái này chỉ dùng trong trường hợp bạn không muốn hiển thị ra dialog, side quá phức tạp (snackbar thì đơn giản thôi, còn side thì mình khuyên là nên tự custom). Các thuộc tính trên truyền vào là nhũng dữ liệu mặc định mà bạn muốn thay đổi UI của item mặc định hoặc gán dữ liệu vào item mặc định. Nhưng giờ bạn muốn lấy dữ liệu một cách phức tạp hơn thì sao? Cho nên là mình hỗ trợ thên cho các bạn function `createModal` dùng để tự tạo ra một object quản lý các modal item.
 
 Nhận vào một object gồm 2 thuộc tính:
@@ -215,8 +216,6 @@ Thì 2 object modal này sẽ có cùng một modal container.
     Các thuộc tính này sẽ nhận vào một chuỗi (HTML), function hoặc là một object. Cụ thể như thế nào thì mình xuống phần hướng dẫn.
 
 ### Xây dựng một modal có chứa dialog, right side và top-right snackbar.
-<a href="#building"></a>
-
 Các UI Element sau khi được tạo từ `createModal` là những UI Element mặc định, tuy nhiên các bạn có thể CUSTOM được nó. `createModal` sẽ trả về một function,
 function này giúp các bạn có thể mở được các modal vừa mới assign ở bên trong.
 
