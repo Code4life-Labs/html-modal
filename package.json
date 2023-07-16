@@ -1,6 +1,6 @@
 {
   "name": "tunangn-html-modal",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Use to show dialog, message for HTML",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
