@@ -215,6 +215,8 @@ Thì 2 object modal này sẽ có cùng một modal container.
     Các thuộc tính này sẽ nhận vào một chuỗi (HTML), function hoặc là một object. Cụ thể như thế nào thì mình xuống phần hướng dẫn.
 
 ### Xây dựng một modal có chứa dialog, right side và top-right snackbar.
+<a href="#building"></a>
+
 Các UI Element sau khi được tạo từ `createModal` là những UI Element mặc định, tuy nhiên các bạn có thể CUSTOM được nó. `createModal` sẽ trả về một function,
 function này giúp các bạn có thể mở được các modal vừa mới assign ở bên trong.
 
