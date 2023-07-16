@@ -75,8 +75,6 @@ function From(
   // Set default options if options is undefined or options hasn't default properties.
   options = setDefaultOptions(options);
 
-  console.log("[From Left] Options: ", options);
-
   element.animate(keyframes, options);
 };
 

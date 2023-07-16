@@ -37,7 +37,6 @@ function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     else if(!clearInlineStyle) {
       let position = options.position ? options.position : item.position;
       let positionStyle;
-      console.log("Position: ", position);
       // Set up transform animation and position.
       switch(position) {
         case "top": {

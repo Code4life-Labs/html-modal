@@ -76,9 +76,7 @@ export class HTMLModal {
       );
       
       document.addEventListener("DOMContentLoaded", () => {
-        console.log("Init HTML Modal");
         this._modal = new Modal();
-        console.log(this._modal);
         let existingModalContainer = document.body.querySelector(`[data-uid='${options?.className || HTMLModal._uid}']`);
         if(existingModalContainer) this._modal.container = existingModalContainer as HTMLDivElement;
         else {
