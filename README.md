@@ -24,6 +24,6 @@ import { dialog } from "https://unpkg.com/tunangn-html-modal@1.5.0/dist/index.js
 ## How to use?
 I split this article into 2 versions of languages:
 
-`Vietnamese`: [Đọc thêm](README_VIE.md)
+`Vietnamese`: [Đọc thêm](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/blob/main/README_VIE.md)
 
-`English`: [Read more](README_ENG.md)
+`English`: [Read more](https://github.com/NguyenAnhTuan1912/tunangn-html-modal/blob/main/README_ENG.md)
