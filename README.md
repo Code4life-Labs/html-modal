@@ -12,13 +12,13 @@ Or just use CDN Link:
 `index.html`
 ```html
 <script type="module">
-  import { dialog } from "https://unpkg.com/tunangn-html-modal@1.5.0/dist/index.js";
+  import { dialog } from "https://unpkg.com/tunangn-html-modal@1.5.3/dist/index.js";
 </script>
 ```
 
 Or `index.js`:
 ```js
-import { dialog } from "https://unpkg.com/tunangn-html-modal@1.5.0/dist/index.js";
+import { dialog } from "https://unpkg.com/tunangn-html-modal@1.5.3/dist/index.js";
 ```
 
 ## How to use?
