@@ -42,7 +42,7 @@ Một số thuộc tính riêng của `dialog`:
 ### Hiển thị dialog MẶC ĐỊNH với một vài thuộc tính.
 Bây giờ mình sẽ hiển thị một dialog với `title`, `content`, `closeBtnLabel` và `agreeBtnLabel` như sau:
 ```js
-import { dialog } from "./node_modules/tunangn-html-modal/build/index.js";
+import { dialog } from "./node_modules/tunangn-html-modal/dist/index.js";
 
 // Hiển thị dialog với title và content
 dialog({
@@ -134,7 +134,7 @@ Side thì không có thuộc tính gì mặc định, và nó sẽ xuất hiện
 ### Hiển thị Side và tạo một unordered list gồm 5 items.
 Giờ thì hiển thị side với một số thông tin và code như sau:
 ```js
-import { side } from "./node_modules/tunangn-html-modal/build/index.js";
+import { side } from "./node_modules/tunangn-html-modal/dist/index.js";
 
 let list = `
 <ul>
@@ -169,7 +169,7 @@ Một số thuộc tính riêng của `snackbar`:
 ### Hiển thị thông báo cùng với icon và lời nhắn
 Cho title hiển thị một icon, và thông báo lời nhắn "Bạn đã đăng nhập thành công", đổi màu thành xanh lá. Ngoài ra thì cho nó hiển thị 3s rồi tắt.
 ```js
-import { snackbar } from "./node_modules/tunangn-html-modal/build/index.js";
+import { snackbar } from "./node_modules/tunangn-html-modal/dist/index.js";
 
 // Hiển thị dialog
 // `fill`` trong class của span là mình đã style cho nó trước.
@@ -222,7 +222,7 @@ function này giúp các bạn có thể mở được các modal vừa mới as
 Ở ví dụ bên dưới mình không thay thế class name và container của item. Và mình sẽ build side và dialog, snackbar thì không cần lắm (nếu như các bạn muốn thì làm theo mình là được). Ngoài ra thì dialog một vài chỗ mình dùng inline style và không style, cho nên sẽ hơi xấu và bất tiện, còn nếu có class và style thì sẽ đẹp hơn.
 ```js
 // Import createModal
-import { createModal } from "./node_modules/tunangn-html-modal/build/index.js";
+import { createModal } from "./node_modules/tunangn-html-modal/dist/index.js";
 
 let dialogName= "myDialog";
 let sideName = "myRightSide";
