@@ -7,9 +7,11 @@ import {
   Snackbar,
   MIResult,
   MIUIEBuilder,
-  MIMOpenCallBackOptions,
+  MIMOpenAppendOptions,
+  MIMOpenRemoveOptions,
   ObjectUtils,
-  ExceptionUtils
+  ExceptionUtils,
+  PublicModalItemProps
 } from "tunangn-modal";
 
 import { DialogTemplate } from "../templates/dialog";
@@ -17,11 +19,18 @@ import { SideTemplate } from "../templates/side";
 import { SnackbarTemplate } from "../templates/snackbar";
 
 import { ElementUtils } from "../utils/element";
+import { SideUtils } from "../utils/side";
+import { SnackbarUtils } from "../utils/snackbar";
 
 import { ModalStyles } from "../styles/modal";
+import { SideComponentsStyle } from "../styles/side";
+import { SnackbarComponentsStyle } from "../styles/snackbar";
+import { DialogComponentsStyle } from "../styles/dialog";
 
 import {
-  HTMLModalAddItemOptions
+  HTMLModalAddItemOptions,
+  BuildModalItemFn,
+  BuildModalItemHasUtilsFn
 } from "../types";
 
 export interface HTMLModalOptions {
@@ -29,6 +38,52 @@ export interface HTMLModalOptions {
    * Use to apply custom css for Modal Container. If `className` isn't set, the 
    */
   className?: string
+}
+
+function getSideUtils(item: PublicModalItemProps) {
+  let { placeOnStyle } = SideUtils.getDefaultConfigures(item.placeOn!);
+  let utils = {
+    getContainerStyle: function(style?: Partial<CSSStyleDeclaration>) {
+      return ElementUtils.mergeStyles(
+        SideComponentsStyle.Container,
+        placeOnStyle,
+        style
+      )
+    },
+    runAnimation: function(ref: HTMLElement) {
+      SideUtils.runDefaultAnim(ref, item.placeOn!);
+    }
+  };
+  return utils;
+}
+
+function getSnackbarUtils(item: PublicModalItemProps) {
+  let { positionStyle } = SnackbarUtils.getDefaultConfigures(item.position!);
+  let utils = {
+    getContainerStyle: function(style?: Partial<CSSStyleDeclaration>) {
+      return ElementUtils.mergeStyles(
+        SnackbarComponentsStyle.Container,
+        positionStyle,
+        style
+      )
+    },
+    runAnimation: function(ref: HTMLElement) {
+      SnackbarUtils.runDefaultAnim(ref, item.position!);
+    }
+  };
+  return utils;
+}
+
+function getDialogUtils(item: PublicModalItemProps) {
+  let utils = {
+    getContainerStyle: function(style?: Partial<CSSStyleDeclaration>) {
+      return ElementUtils.mergeStyles(
+        DialogComponentsStyle.Container,
+        style
+      )
+    }
+  };
+  return utils;
 }
 
 export class HTMLModal {
@@ -178,17 +233,25 @@ export class HTMLModal {
           item = new Dialog<HTMLDivElement>({
             name: options.name,
             build: function(builder) {
-              // Build Container for Dialog
-              builder.buildCompoment("container", DialogTemplate.buildContainer(options));
+              if(typeof options.components === "function" && options.components) {
+                builder.buildCompoment("container",
+                  (close, item) => (options.components as BuildModalItemHasUtilsFn)(close, item, getDialogUtils(item))
+                );
+              } else {
+                // Build Container for Dialog
+                builder.buildCompoment("container", (close, item) => {
+                  return DialogTemplate.buildContainer(options, getDialogUtils(item))(close, item)
+                });
 
-              // Build Header for Dialog
-              builder.buildCompoment("header", DialogTemplate.buildHeader(options));
+                // Build Header for Dialog
+                builder.buildCompoment("header", DialogTemplate.buildHeader(options));
 
-              // Build Body for Dialog
-              builder.buildCompoment("body", DialogTemplate.buildBody(options));
+                // Build Body for Dialog
+                builder.buildCompoment("body", DialogTemplate.buildBody(options));
 
-              // Build Footer for Dialog
-              builder.buildCompoment("footer", DialogTemplate.buildFooter(options));
+                // Build Footer for Dialog
+                builder.buildCompoment("footer", DialogTemplate.buildFooter(options));
+              }
 
               return true;
             }
@@ -201,17 +264,27 @@ export class HTMLModal {
             name: options.name,
             placeOn: options.placeOn,
             build: function(builder) {
-              // Build Container for Side
-              builder.buildCompoment("container", SideTemplate.buildContainer(options));
+              if(typeof options.components === "function") {
+                builder.buildCompoment("container",
+                  (close, item) => {
+                    return (options.components as BuildModalItemHasUtilsFn)(close, item, getSideUtils(item))
+                  }
+                );
+              } else {
+                // Build Container for Side
+                builder.buildCompoment("container", (close, item) => {
+                  return SideTemplate.buildContainer(options, getSideUtils(item))(close, item)
+                });
 
-              // Build Header for Side
-              builder.buildCompoment("header", SideTemplate.buildHeader(options));
+                // Build Header for Side
+                builder.buildCompoment("header", SideTemplate.buildHeader(options));
 
-              // Build Body for Side
-              builder.buildCompoment("body", SideTemplate.buildBody(options));
+                // Build Body for Side
+                builder.buildCompoment("body", SideTemplate.buildBody(options));
 
-              // Build Footer for Side
-              builder.buildCompoment("footer", SideTemplate.buildFooter(options));
+                // Build Footer for Side
+                builder.buildCompoment("footer", SideTemplate.buildFooter(options));
+              }
 
               return true;
             }
@@ -224,17 +297,25 @@ export class HTMLModal {
             name: options.name,
             position: options.position,
             build: function(builder) {
-              // Build Container for Snackbar
-              builder.buildCompoment("container", SnackbarTemplate.buildContainer(options));
+              if(typeof options.components === "function") {
+                builder.buildCompoment("container",
+                  (close, item) => (options.components as BuildModalItemHasUtilsFn)(close, item, getSnackbarUtils(item))
+                );
+              } else {
+                // Build Container for Snackbar
+                builder.buildCompoment("container",
+                  (close, item) => SnackbarTemplate.buildContainer(options, getSnackbarUtils(item))(close, item)
+                );
 
-              // Build Header for Snackbar
-              builder.buildCompoment("header", SnackbarTemplate.buildHeader(options));
+                // Build Header for Snackbar
+                builder.buildCompoment("header", SnackbarTemplate.buildHeader(options));
 
-              // Build Body for Snackbar
-              builder.buildCompoment("body", SnackbarTemplate.buildBody(options));
+                // Build Body for Snackbar
+                builder.buildCompoment("body", SnackbarTemplate.buildBody(options));
 
-              // Build Footer for Snackbar
-              builder.buildCompoment("footer", SnackbarTemplate.buildFooter(options));
+                // Build Footer for Snackbar
+                builder.buildCompoment("footer", SnackbarTemplate.buildFooter(options));
+              }
 
               return true;
             }
@@ -266,12 +347,12 @@ export class HTMLModal {
    * @method
    * @param options Options
    */
-  private _append(options: MIMOpenCallBackOptions) {
+  private _append(options: MIMOpenAppendOptions) {
     this._modal.container?.append(options.MIUIElement);
   }
 
-  private _remove(MIUIComponent: any) {
-    this._modal.container?.removeChild(MIUIComponent);
+  private _remove(options: MIMOpenRemoveOptions) {
+    this._modal.container?.removeChild(options.MIUIElement);
 
     // Hide modal container first
     // Reset all modal styles.

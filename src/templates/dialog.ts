@@ -8,21 +8,24 @@ import { SpacingStyles } from "../styles/bases/spacing";
 
 import {
   DialogDefaultData,
-  HTMLModalAddItemOptions
+  HTMLModalAddItemOptions,
+  ModalComponents,
+  BuildModalItemFn
 } from "../types"
 
-function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>) {
+function buildContainer(options: HTMLModalAddItemOptions<HTMLDivElement>, utils: any): BuildModalItemFn {
   return function(
     close: (result: MIResult) => void,
     item: PublicModalItemProps
   ) {
-    let container = options?.components?.container;
+    let container = (options?.components as ModalComponents<HTMLDivElement>)?.container;
     let data = item.getData() as DialogDefaultData;
 
     if(
       typeof container === "string"
       || typeof container === "function"
-    ) return ElementUtils.getHTMLElementFromOptions(container, { close, item, data });
+    ) return ElementUtils.getHTMLElementFromOptions(container, { close, item, data, utils });
+    
     let divEle = document.createElement("div");
 
     let clearInlineStyle = options.clearAllDefaultInlineStyle || container?.clearDefaultInlineStyle;
@@ -42,7 +45,7 @@ function buildHeader(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     close: (result: MIResult) => void,
     item: PublicModalItemProps
   ) {
-    let header = options?.components?.header;
+    let header = (options?.components as ModalComponents<HTMLDivElement>)?.header;
     let data = item.getData() as DialogDefaultData;
 
     // Header can be null
@@ -87,7 +90,7 @@ function buildBody(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     close: (result: MIResult) => void,
     item: PublicModalItemProps
   ) {
-    let body = options?.components?.body;
+    let body = (options?.components as ModalComponents<HTMLDivElement>)?.body;
     let data = item.getData() as DialogDefaultData;
 
     // Body can be null
@@ -129,7 +132,7 @@ function buildFooter(options: HTMLModalAddItemOptions<HTMLDivElement>) {
     close: (result: MIResult) => void,
     item: PublicModalItemProps
   ) {
-    let footer = options?.components?.footer;
+    let footer = (options?.components as ModalComponents<HTMLDivElement>)?.footer;
     let data = item.getData() as DialogDefaultData;
     
     // Footer can be null

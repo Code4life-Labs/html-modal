@@ -1,5 +1,7 @@
 import { MITypes, MIResult, ModalItem, PublicModalItemProps } from "tunangn-modal";
 
+import { BuildModalItemFn, BuildModalItemHasUtilsFn } from "../types";
+
 /**
  * **ElementUtils**
  * 
@@ -22,11 +24,11 @@ function addStyle(element: HTMLElement, style: {[styleName in keyof Partial<CSSS
  * @param styles Inline style object of MI.
  * @returns 
  */
-function mergeStyles(...styles: Array<Partial<CSSStyleDeclaration>>) {
+function mergeStyles(...styles: Array<Partial<CSSStyleDeclaration> | undefined>) {
   let merged = {};
 
   for(let style of styles) {
-    if(typeof style === "object" && Array.isArray(style)) {
+    if(style && typeof style === "object" && Array.isArray(style)) {
       merged = {...merged, ...mergeStyles(...style)};
     } else {
       merged = {...merged, ...style};
@@ -45,16 +47,18 @@ function mergeStyles(...styles: Array<Partial<CSSStyleDeclaration>>) {
  * @returns 
  */
 function getHTMLElementFromOptions<UIElementType, Data>(
-  element: string | ((close: (result: MIResult) => void, item: PublicModalItemProps) => UIElementType),
+  element: string | BuildModalItemFn | BuildModalItemHasUtilsFn,
   args?: {
     close: (result: MIResult) => void,
     item: PublicModalItemProps,
     data?: Data,
+    utils?: any
   }
 ) {
   switch(typeof element) {
     case "function": {
-      return element(args?.close!, args?.item!);
+      if(args?.utils) return element(args?.close!, args?.item!, args?.utils);
+      return (element as BuildModalItemFn)(args?.close!, args?.item!);
     };
 
     case "string": {

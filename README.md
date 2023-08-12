@@ -1,6 +1,9 @@
 # tunangn-html-modal
 Use to show dialog, message for HTML. You can use this package easily to manage your dialog, snackbar or side in your **Vanilla Javascript** (**Plain Javascript**) Project. Ensure for privacy!! Dialog, side and snackbar only show (in screen or in DON Tree) if them are opened.
 
+## Demo
+You can see the demo [here](https://codepen.io/nguyenanhtuan1912/pen/PoxaWEG)
+
 ## Install
 You can install it by:
 ```js

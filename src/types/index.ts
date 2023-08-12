@@ -96,6 +96,28 @@ export interface MIFooter<UIElementType> extends MIUIComponent<UIElementType> {
   // agreeEnableWhen?: () => Promise<boolean>
 }
 
+export type BuildModalItemFn = (close: (result: MIResult) => void, item: PublicModalItemProps) => any
+export type BuildModalItemHasUtilsFn = (close: (result: MIResult) => void, item: PublicModalItemProps, utils: any) => any
+
+export interface ModalComponents<UIElementType> {
+  /**
+   * UI Element of Modal Item Container.
+   */
+  container?: MIContainer<UIElementType> | string | BuildModalItemHasUtilsFn,
+  /**
+   * UI Element of Modal Item Header.
+   */
+  header?: MIHeader<UIElementType> | string | BuildModalItemFn | null,
+  /**
+   * UI Element of Modal Item Body.
+   */
+  body?: MIBody<UIElementType> | string | BuildModalItemFn | null,
+  /**
+   * UI Element of Modal Item Footer.
+   */
+  footer?: MIFooter<UIElementType> | string | BuildModalItemFn | null,
+}
+
 export interface HTMLModalAddItemOptions<UIElementType> {
   /**
    * Name of Modal Item.
@@ -112,24 +134,7 @@ export interface HTMLModalAddItemOptions<UIElementType> {
    * - function: Build you own Modal Item.
    * - HTML String: the simplest way :D.
    */
-  components?: {
-    /**
-     * UI Element of Modal Item Container.
-     */
-    container?: MIContainer<UIElementType> | string | ((close: (result: MIResult) => void, item: PublicModalItemProps) => UIElementType),
-    /**
-     * UI Element of Modal Item Header.
-     */
-    header?: MIHeader<UIElementType> | string | ((close: (result: MIResult) => void, item: PublicModalItemProps) => UIElementType) | null,
-    /**
-     * UI Element of Modal Item Body.
-     */
-    body?: MIBody<UIElementType> | string | ((close: (result: MIResult) => void, item: PublicModalItemProps) => UIElementType) | null,
-    /**
-     * UI Element of Modal Item Footer.
-     */
-    footer?: MIFooter<UIElementType> | string | ((close: (result: MIResult) => void, item: PublicModalItemProps) => UIElementType) | null,
-  }
+  components?: ModalComponents <UIElementType>| BuildModalItemHasUtilsFn
   /**
    * Clear all default inline style.
    */
